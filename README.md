@@ -15,7 +15,7 @@ skill and tooling around it:
 | Captions | Word-by-word "pop" captions, active word highlighted | ASS + libass, burned in during the cut pass |
 | Music | Royalty-free tracks (CC0 / CC BY) picked to match the speaking pace, time-stretched to one tempo, crossfaded on bar lines, ending exactly on the last frame, ducked under speech | Openverse, librosa, rubberband |
 | Voice-over | Indonesian (and 29 other languages) narration with a consistent or cloned voice | [VoxCPM2](https://github.com/OpenBMB/VoxCPM) |
-| Motion graphics | Title cards, and full animated explainer videos where scene changes snap to the beat | [Remotion](https://www.remotion.dev) |
+| Motion graphics | Title cards, and full animated explainer videos where scene changes snap to the beat. All motion, captions included, uses one rig: staggered springs, parts that trail their parent, area-preserving squash, eased exits, calm idle motion. Rules: [`references/motion.md`](references/motion.md) | [Remotion](https://www.remotion.dev) |
 | Illustrated animation | Kurzgesagt-style scenes: Gemini flat-vector art traced to SVG, soft bodies from a deterministic physics sim, anticipation and overshoot on every event. Guide: [`references/illustrated-animation.md`](references/illustrated-animation.md) | Remotion, vtracer |
 | Mix | Speech + music, loudness normalised to −14 LUFS | ffmpeg |
 

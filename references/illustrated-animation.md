@@ -2,7 +2,8 @@
 
 Mode C: flat-vector scenes where things move, deform and split (cells, creatures, organic props),
 built in Remotion. These are the lessons from a mitosis test scene that went from "not fluid enough,
-jiggle physics off" to "that's better".
+jiggle physics off" to "that's better". The general motion rules, perception principles, frame-strip
+verification and safe rendering are in `motion.md`; this file adds what is specific to illustration.
 
 ## Pipeline
 
@@ -48,15 +49,12 @@ Ranked by how much each one changed the result.
    - After the release, overshoot and settle. The underdamped step response
      `1 - e^(-ζωt)(cos ω_d t + (ζω/ω_d) sin ω_d t)` with ζ = 0.5 and ω = 12 gives one visible overshoot.
    - Force the event to happen on its frame instead of detecting it, so it always lands on the beat.
-3. **One focal mover per beat.** People track about 4 objects at once, and the start of a motion is
-   what grabs the eye. Stagger related reactions by 3–5 frames and rest 15–30 frames between beats.
-   Keep idle motion slow and at about 5% of the hero motion's amplitude.
+3. **One focal mover per beat**, with staggered reactions (`motion.md` rule 1).
 4. **Contents trail and react.** Organelles sit on damped anchor springs (stiffness 60, damping 5.4),
    collide with the membrane and with each other, and squash along their velocity:
    `rotate(dir) scale(1+s, 1/(1+s)) rotate(-dir)`, with `s = min(0.22, speed/1600)`. A lean into
    horizontal motion sells weight.
-5. **60 fps.** Elastic motion at 30 fps strobes.
-6. **Detail without clutter.**
+5. **Detail without clutter.**
    - **Depth:** 5 parallax layers (far blurred cells, two dot layers, the subject, blurry foreground
      dots). Turn the far layers down until they stop competing with the subject; the first pass was
      too loud.
@@ -109,34 +107,15 @@ identical frames. A 1200-frame run takes about 0.6 s.
 
 ## Remotion pitfalls
 
-- `spring()` settles in about 1 s whatever the stiffness. For moves over several seconds, use
-  `interpolate` with `Easing.bezier`.
 - Sprites: `<Img src={staticFile(...svg)}>`, absolutely positioned. Split a sprite in half with
   `clip-path: inset(0 50% 0 0)`.
 - For the gooey-blob look without physics, run two circles through an `feGaussianBlur` and an alpha
   threshold `feColorMatrix`. Use it for quick tests only; it cannot react to forces.
-- A precomputed simulation indexed by integer frame breaks anything that renders fractional frames,
-  such as `CameraMotionBlur`. Interpolate between neighbouring frames first.
 - If `bun install` hangs on a Remotion project, use `npm install`.
-
-## Perception principles
-
-1. **One focal mover; motion onset captures attention; track at most about 4 objects.** (Abrams &
-   Christ 2003; Pylyshyn & Storm 1988; Mayer's coherence principle)
-2. **Ease organic motion; linear reads mechanical.** (Flash & Hogan 1985; Viviani & Flash 1995)
-3. **Squash and stretch with conserved area, anticipation, follow-through.** (Lasseter 1987)
-4. **Round shapes read friendly, sharp shapes read as threat.** The effect is modest. (Bar & Neta 2006)
-5. **Visual change lands on the word that names it.** (Mayer: temporal contiguity)
-6. **Palette of 3–5 hues:** cool dark background, lighter figure, one warm accent, saturation saved
-   for the climax. (Schloss & Palmer 2011; Valdez & Mehrabian 1994)
-7. **Low-clutter background, high-contrast subject.** (Reber, Schwarz & Winkielman 2004; Rosenholtz
-   et al. 2007)
-8. **Build tension, then one clean payoff; parts that move together read as one thing.** (Cheung et
-   al. 2019; Wagemans et al. 2012)
 
 ## Verify
 
-You cannot watch the video, so measure it.
+On top of the frame strips and checklist in `motion.md`:
 
 - **Headless simulation check before any render.** A script that runs the simulation and prints:
   - NaNs
@@ -145,26 +124,11 @@ You cannot watch the video, so measure it.
   - neck width against its target
   - the gap between the daughter cells
 - **Stills** at the key frame of each beat, built into a contact sheet.
-- **Frame strips** around each event (every 2nd frame for 20–30 frames). Read the wind-up, hold,
-  release and settle from the strip.
-- **The final encoded MP4:** extract frames from it too, not only from Remotion stills.
-- **Checklist:**
-  - one hero motion per beat
-  - no linear motion on organic parts
-  - area conserved
+- **Extra checklist items:**
   - anticipation and overshoot on every big event
   - contents lag and react
-  - no overlaps
-  - palette of 3–5 hues
-  - idle motion slow
+  - no sprite overlaps
   - payoff held at least 20 frames
   - depth, lighting and juice on the payoff
 
-## Safe rendering on a laptop
-
-- Never delete files in the same command as a render, and never use `rm -rf`. Write every round to new
-  versioned folders (`build-v5`, `out/stills-v5`).
-- Run every bundle and render inside a memory cap:
-  `systemd-run --user --scope -p MemoryMax=4G -p MemorySwapMax=0 --quiet bash -c '...'`. Use 6G and
-  `--concurrency=3` for full renders, and run one render at a time. One stills round peaked at about
-  0.8 GB, and a full 20 s 1080p60 render took about a minute.
+A full 20 s 1080p60 illustrated render took about a minute inside the memory cap.

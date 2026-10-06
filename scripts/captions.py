@@ -5,6 +5,7 @@ from pathlib import Path
 
 MAX_WORDS = 6
 FONT = "Plus Jakarta Sans ExtraBold"
+PAPER = "&H00F7FDFF"  # caption text colour (ASS &HAABBGGRR), same as the Pop style
 
 
 def _ass_time(t):
@@ -51,8 +52,12 @@ Style: Pop,{FONT},{round(height * 0.065)},&H00F7FDFF,&H00F7FDFF,&H001F1414,&H001
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
     events = []
-    for line in group_lines(words):
+    lines = group_lines(words)
+    for n, line in enumerate(lines):
+        # Linger after the last word, but never overlap the next line.
         line_end = line[-1]["end"] + 0.25
+        if n + 1 < len(lines):
+            line_end = min(line_end, lines[n + 1][0]["start"])
         for k, w in enumerate(line):
             start = line[0]["start"] if k == 0 else w["start"]
             end = line[k + 1]["start"] if k + 1 < len(line) else line_end
@@ -60,12 +65,15 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             for j, x in enumerate(line):
                 t = _esc(x["text"])
                 if j == k:
-                    # active word: accent colour + small pop
-                    parts.append(r"{\c" + accent + r"&\fscx112\fscy112}" + t + r"{\r}")
+                    # active word: colour eases in with a brief pop that settles back to 100%
+                    # (the opaque box is drawn per word, so a held scale would leave a step in it)
+                    parts.append(r"{\t(0,70,0.5,\c" + accent + r"&\fscx110\fscy110)\t(70,200,\fscx100\fscy100)}" + t + r"{\r}")
+                elif j == k - 1:
+                    # previous word's colour eases back instead of snapping
+                    parts.append(r"{\c" + accent + r"&\t(0,150,\c" + PAPER + r"&)}" + t + r"{\r}")
                 else:
                     parts.append(t)
-            # first event of a line slides in slightly
-            fx = r"{\fad(80,0)}" if k == 0 else ""
+            fx = r"{\fad(120,0)}" if k == 0 else ""
             events.append(f"Dialogue: 0,{_ass_time(start)},{_ass_time(end)},Pop,,0,0,0,,{fx}{' '.join(parts)}")
     Path(path).write_text(header + "\n".join(events) + "\n", encoding="utf-8")
     return path

@@ -24,6 +24,21 @@ input is missing (no file, no topic).
 
 Production format is **1280×720, 60 fps** (sources above 720p are downscaled; 60 fps is kept).
 
+## Motion (all modes)
+
+Every animated element follows `references/motion.md`, whatever the mode. Read it before adding or
+changing any animation. Remotion code goes through the shared rig in `remotion/src/motion.ts`, and the
+ASS captions follow the same rules. In short:
+
+- one motion onset at a time, with related parts staggered 4–5 frames
+- children rigged on their own lagging springs, never welded to their parent
+- springs for arrivals, eased exits, never linear
+- squash and stretch that keeps the area
+- slow, small idle motion
+- colours that ease instead of snapping
+
+Check motion in frame strips, not single stills.
+
 ## Pick the mode
 
 | Input | Mode |
@@ -89,8 +104,9 @@ Production format is **1280×720, 60 fps** (sources above 720p are downscaled; 6
 
 ## C. Illustrated animation
 
-Read `references/illustrated-animation.md` before starting. It holds the pipeline, the reasons behind
-each choice, the soft-body recipe, Remotion pitfalls and the verification checklist. In short:
+Read `references/motion.md`, then `references/illustrated-animation.md`, before starting. The second
+holds the pipeline, the reasons behind each choice, the soft-body recipe and the extra checks for
+illustration. In short:
 
 1. Beat sheet: one focal mover per beat, with its anticipation and payoff.
 2. Flat-vector sprite sheet from Gemini on a solid background. Split it, trace each part with

@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
-import { spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { interpolateColors, useCurrentFrame, useVideoConfig } from "remotion";
+import { POP, rig, SOFT } from "./motion";
 import { fontFamily, INK, PAPER, Word } from "./theme";
 
 const MAX_WORDS = 6;
@@ -30,7 +31,7 @@ export const Captions: React.FC<{ words: Word[]; accent: string }> = ({ words, a
   const line = lines.find((l) => t >= l[0].start - 0.05 && t <= l[l.length - 1].end + 0.25);
   if (!line) return null;
 
-  const lineIn = spring({ frame: frame - Math.round(line[0].start * fps), fps, config: { damping: 14, stiffness: 180 } });
+  const lineIn = rig(frame - Math.round(line[0].start * fps), fps, SOFT).v;
 
   return (
     <div
@@ -59,16 +60,18 @@ export const Captions: React.FC<{ words: Word[]; accent: string }> = ({ words, a
         }}
       >
         {line.map((w, i) => {
-          const active = t >= w.start && t < w.end + 0.05;
-          const pop = spring({ frame: frame - Math.round(w.start * fps), fps, config: { damping: 10, stiffness: 260 } });
+          // Highlight eases in on the word's start and back out after it, instead of snapping.
+          const on = rig(frame - Math.round(w.start * fps), fps, POP).v;
+          const off = rig(frame - Math.round((w.end + 0.05) * fps), fps, SOFT).v;
+          const lit = Math.max(0, Math.min(1, on - off));
           return (
             <span
               key={i}
               style={{
                 display: "inline-block",
                 marginRight: 12,
-                color: active ? accent : PAPER,
-                transform: `scale(${active ? 1 + 0.12 * pop : 1})`,
+                color: interpolateColors(Math.min(1, lit), [0, 1], [PAPER, accent]),
+                transform: `scale(${1 + 0.08 * (on - off)})`,
               }}
             >
               {w.text}

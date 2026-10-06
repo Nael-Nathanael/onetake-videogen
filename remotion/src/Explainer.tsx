@@ -1,6 +1,7 @@
 import React from "react";
-import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { Captions } from "./Captions";
+import { breathe, exit, POP, rig, SOFT, squash, stagger } from "./motion";
 import { beatPhase, DEFAULT_PALETTE, fontFamily, INK, PAPER, Scene, Word } from "./theme";
 
 export type ExplainerProps = {
@@ -16,9 +17,13 @@ export type ExplainerProps = {
 const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: number }> = ({ scene, color, t, pulse }) => {
   const { fps } = useVideoConfig();
   const local = Math.round((t - scene.start) * fps);
-  const enter = spring({ frame: local, fps, config: { damping: 12, stiffness: 140 } });
-  const exitIn = scene.end - t;
-  const exit = interpolate(exitIn, [0, 0.25], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  // The panel settles without a bounce; the parts on it arrive one after another.
+  const panel = rig(local, fps, SOFT).v;
+  const kicker = rig(local - stagger(1), fps, POP);
+  const title = rig(local - stagger(scene.kicker ? 2 : 1), fps, POP);
+  const emoji = rig(local - stagger(scene.kicker ? 4 : 3), fps, POP);
+  const [ty, tx] = squash(title.vel);
+  const out = exit(Math.round((scene.end - t) * fps));
   const layout = scene.layout ?? (scene.points?.length ? "points" : "title");
   const titleSize = layout === "big" ? 120 : layout === "title" ? 84 : 60;
 
@@ -26,8 +31,8 @@ const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: numbe
     <AbsoluteFill
       style={{
         background: color,
-        opacity: exit,
-        transform: `scale(${0.92 + 0.08 * enter})`,
+        opacity: out,
+        transform: `scale(${(0.94 + 0.06 * panel) * (0.98 + 0.02 * out)})`,
         padding: "70px 90px 150px",
         justifyContent: layout === "points" ? "flex-start" : "center",
         alignItems: layout === "points" ? "flex-start" : "center",
@@ -35,7 +40,7 @@ const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: numbe
         color: PAPER,
       }}
     >
-      {/* Beat-synced accent blob in the corner keeps the frame alive between points. */}
+      {/* Accent blob breathes slowly with a faint beat accent: alive, never busy. */}
       <div
         style={{
           position: "absolute",
@@ -46,7 +51,7 @@ const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: numbe
           borderRadius: "50%",
           background: PAPER,
           opacity: 0.12,
-          transform: `scale(${1 + 0.08 * pulse})`,
+          transform: `scale(${breathe(t, 7, 0.03) * (1 + 0.015 * pulse)})`,
         }}
       />
       {scene.kicker && (
@@ -60,7 +65,8 @@ const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: numbe
             padding: "6px 16px",
             borderRadius: 10,
             marginBottom: 18,
-            transform: `translateY(${(1 - enter) * -40}px)`,
+            opacity: Math.min(1, kicker.v * 1.5),
+            transform: `translateY(${(1 - kicker.v) * -30}px)`,
           }}
         >
           {scene.kicker}
@@ -73,18 +79,33 @@ const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: numbe
           lineHeight: 1.08,
           textAlign: layout === "points" ? "left" : "center",
           maxWidth: 1100,
-          transform: `translateY(${(1 - enter) * 60}px)`,
+          opacity: Math.min(1, title.v * 1.5),
+          transform: `translateY(${(1 - title.v) * 50}px) scale(${tx}, ${ty})`,
           textShadow: `0 6px 0 ${INK}33`,
         }}
       >
-        {scene.emoji && <span style={{ marginRight: 20 }}>{scene.emoji}</span>}
+        {scene.emoji && (
+          <span
+            style={{
+              display: "inline-block",
+              marginRight: 20,
+              transform: `scale(${emoji.v}) rotate(${(1 - emoji.v) * -20}deg)`,
+            }}
+          >
+            {scene.emoji}
+          </span>
+        )}
         {scene.title}
       </div>
       {layout === "points" && (
         <div style={{ marginTop: 36, display: "flex", flexDirection: "column", gap: 20 }}>
           {(scene.points ?? []).map((p, i) => {
-            const pin = spring({ frame: Math.round((t - p.at) * fps), fps, config: { damping: 11, stiffness: 200 } });
             if (t < p.at) return null;
+            const f = Math.round((t - p.at) * fps);
+            const row = rig(f, fps, POP);
+            const [rx, ry] = squash(row.vel);
+            // The number badge trails its row and pops in after it lands.
+            const badge = rig(f - 4, fps, POP).v;
             return (
               <div
                 key={i}
@@ -98,8 +119,8 @@ const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: numbe
                   color: INK,
                   padding: "12px 24px",
                   borderRadius: 16,
-                  transform: `translateX(${(1 - pin) * -80}px) scale(${0.9 + 0.1 * pin})`,
-                  opacity: pin,
+                  transform: `translateX(${(1 - row.v) * -80}px) scale(${(0.92 + 0.08 * row.v) * rx}, ${(0.92 + 0.08 * row.v) * ry})`,
+                  opacity: Math.min(1, row.v * 1.5),
                 }}
               >
                 <span
@@ -113,6 +134,7 @@ const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: numbe
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: 800,
+                    transform: `scale(${badge})`,
                   }}
                 >
                   {i + 1}

@@ -1,5 +1,6 @@
 import React from "react";
-import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
+import { exit, POP, rig, squash } from "./motion";
 import { fontFamily, INK, PAPER } from "./theme";
 
 export type TitleCardProps = {
@@ -14,12 +15,13 @@ export type TitleCardProps = {
 export const TitleCard: React.FC<TitleCardProps> = ({ title, subtitle, accent = "#FF5A5F", position = "lower-third" }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
-  const enter = spring({ frame, fps, config: { damping: 12, stiffness: 170 } });
-  const out = interpolate(frame, [durationInFrames - 12, durationInFrames], [1, 0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-  const sub = spring({ frame: frame - 8, fps, config: { damping: 14, stiffness: 160 } });
+  const card = rig(frame, fps, POP);
+  const [cx, cy] = squash(card.vel);
+  // The shadow lands after the card: follow-through instead of a welded-on drop shadow.
+  const shadow = rig(frame - 4, fps, POP).v;
+  const sub = rig(frame - 8, fps, POP);
+  const [sy, sx] = squash(sub.vel);
+  const out = exit(durationInFrames - frame, 18);
   const center = position === "center";
 
   return (
@@ -30,9 +32,10 @@ export const TitleCard: React.FC<TitleCardProps> = ({ title, subtitle, accent = 
         padding: center ? 0 : "0 0 150px 70px",
         fontFamily,
         opacity: out,
+        transform: `translateY(${(1 - out) * -14}px)`,
       }}
     >
-      <div style={{ transform: `translateX(${(1 - enter) * -60}px) scale(${0.85 + 0.15 * enter})` }}>
+      <div style={{ transform: `translateX(${(1 - card.v) * -60}px) scale(${(0.9 + 0.1 * card.v) * cx}, ${(0.9 + 0.1 * card.v) * cy})` }}>
         <div
           style={{
             display: "inline-block",
@@ -42,7 +45,7 @@ export const TitleCard: React.FC<TitleCardProps> = ({ title, subtitle, accent = 
             fontSize: center ? 88 : 54,
             padding: "10px 26px",
             borderRadius: 16,
-            boxShadow: `8px 8px 0 ${INK}`,
+            boxShadow: `${8 * shadow}px ${8 * shadow}px 0 ${INK}`,
           }}
         >
           {title}
@@ -59,8 +62,8 @@ export const TitleCard: React.FC<TitleCardProps> = ({ title, subtitle, accent = 
               fontSize: center ? 40 : 30,
               padding: "8px 20px",
               borderRadius: 12,
-              opacity: sub,
-              transform: `translateY(${(1 - sub) * 20}px)`,
+              opacity: Math.min(1, sub.v * 1.5),
+              transform: `translateY(${(1 - sub.v) * 20}px) scale(${sx}, ${sy})`,
             }}
           >
             {subtitle}
