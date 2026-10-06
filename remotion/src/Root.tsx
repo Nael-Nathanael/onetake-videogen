@@ -2,6 +2,7 @@ import React from "react";
 import { Composition } from "remotion";
 import { Explainer, ExplainerProps } from "./Explainer";
 import { TitleCard, TitleCardProps } from "./TitleCard";
+import { Cell, cellDuration, cellFps } from "./illustrated/cell/Cell";
 
 // Production format: 720p60.
 const W = 1280;
@@ -56,5 +57,7 @@ export const Root: React.FC = () => (
       defaultProps={{ title: "Judul Video", subtitle: "Subjudul singkat", seconds: 4 } satisfies TitleCardProps}
       calculateMetadata={({ props }) => ({ durationInFrames: Math.max(1, Math.ceil(props.seconds * FPS)) })}
     />
+    {/* Illustrated compositions are authored in 1920×1080 coordinates; remotion.py renders them with --scale to 720p. */}
+    <Composition id="Cell" component={Cell} width={1920} height={1080} fps={cellFps} durationInFrames={cellDuration} />
   </>
 );
