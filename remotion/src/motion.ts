@@ -22,6 +22,13 @@ export const squash = (vel: number, amount = 0.02, max = 0.12) => {
   return [1 + s, 1 / (1 + s)] as const;
 };
 
+/** CSS transform: `squash` along a 2D velocity (px/s), times a uniform scale `k`. */
+export const squashAlong = (vx: number, vy: number, amount: number, max: number, k = 1) => {
+  const [along, across] = squash(Math.hypot(vx, vy), amount, max);
+  const dir = (Math.atan2(vy, vx) * 180) / Math.PI;
+  return `rotate(${dir}deg) scale(${along * k}, ${k * across}) rotate(${-dir}deg)`;
+};
+
 /** Related parts start a few frames apart, so only one thing starts moving at a time. */
 export const stagger = (i: number, gap = 5) => i * gap;
 
