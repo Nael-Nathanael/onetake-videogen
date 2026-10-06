@@ -23,7 +23,12 @@ const toLines = (words: Word[]) => {
   return lines;
 };
 
-export const Captions: React.FC<{ words: Word[]; accent: string }> = ({ words, accent }) => {
+export const Captions: React.FC<{ words: Word[]; accent: string; ink?: string; paper?: string }> = ({
+  words,
+  accent,
+  ink = INK,
+  paper = PAPER,
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
@@ -50,8 +55,8 @@ export const Captions: React.FC<{ words: Word[]; accent: string }> = ({ words, a
           fontFamily,
           fontWeight: 800,
           fontSize: 44,
-          background: INK,
-          color: PAPER,
+          background: ink,
+          color: paper,
           padding: "10px 22px",
           borderRadius: 18,
           maxWidth: 1100,
@@ -69,9 +74,10 @@ export const Captions: React.FC<{ words: Word[]; accent: string }> = ({ words, a
               key={i}
               style={{
                 display: "inline-block",
-                marginRight: 12,
-                color: interpolateColors(Math.min(1, lit), [0, 1], [PAPER, accent]),
-                transform: `scale(${1 + 0.08 * (on - off)})`,
+                // The gap must outlast the pop: a 300 px word at 1.04 grows 6 px a side.
+                marginRight: 16,
+                color: interpolateColors(Math.min(1, lit), [0, 1], [paper, accent]),
+                transform: `scale(${1 + 0.04 * (on - off)})`,
               }}
             >
               {w.text}

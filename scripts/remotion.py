@@ -2,7 +2,7 @@
 """
 Render Remotion compositions from ~/OneTake/videogen/remotion (720p60).
 
-  run.sh remotion.py explainer SCENES.json OUT.mp4 --words vo.words.json --duration SEC [--beats beats.json]
+  run.sh remotion.py explainer SCENES.json OUT.mp4 --words vo.words.json --duration SEC [--beats beats.json] [--theme theme.json]
   run.sh remotion.py titlecard OUT.mov --title "..." [--subtitle "..."] [--seconds 4] [--center]
   run.sh remotion.py illustrated OUT.mp4 [--comp Cell] [--concurrency 3]
 
@@ -58,6 +58,7 @@ def main():
     e.add_argument("--duration", type=float, required=True)
     e.add_argument("--beats")
     e.add_argument("--no-captions", action="store_true")
+    e.add_argument("--theme", help='JSON with any of {"palette": [...], "ink", "paper", "accent"}')
     t = sub.add_parser("titlecard")
     t.add_argument("out")
     t.add_argument("--title", required=True)
@@ -78,7 +79,8 @@ def main():
         scenes = snap_to_beats(scenes, beats["beats"])
         scenes[-1]["end"] = a.duration
         props = {"duration": a.duration, "scenes": scenes, "words": words, "bpm": beats["bpm"],
-                 "beatOffset": beats.get("beat_offset", 0), "captions": not a.no_captions}
+                 "beatOffset": beats.get("beat_offset", 0), "captions": not a.no_captions,
+                 **(load_json(a.theme) if a.theme else {})}
         render("Explainer", a.out, props, ["--muted", "--codec=h264", "--crf=18"])
     elif a.cmd == "illustrated":
         render(a.comp, a.out, {}, ["--muted", "--codec=h264", "--crf=18", f"--scale={TARGET_W / ILLUSTRATED_W}",

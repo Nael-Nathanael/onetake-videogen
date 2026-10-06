@@ -147,6 +147,9 @@ Work from what the user wants the viewer to get, not from keywords in the reques
 5. **Music**: `$S/run.sh music.py $J/music --duration <vo duration> --words $J/vo/words.json`
 6. **Render**: `$S/run.sh remotion.py explainer $J/scenes.json $J/visual.mp4 --words $J/vo/words.json --duration <vo duration> --beats $J/music/beats.json`
    Scene changes snap to the nearest beat; accents pulse on the beat.
+   For a brand's look add `--theme $J/theme.json` = `{"palette": [...], "ink": "#…", "paper": "#…", "accent": "#…"}`.
+   `paper` is the scene text, `ink` the frame and card text; for dark text on pale scenes pass the dark tone as
+   `paper` and give `accent` a text-safe shade, since bright brand colours rarely read on a pale caption box.
 7. **Mix**: `$S/run.sh mix.py $J/visual.mp4 $J/final.mp4 --voice $J/vo.wav --music $J/music/bed.wav`
 
 ## C. Illustrated animation

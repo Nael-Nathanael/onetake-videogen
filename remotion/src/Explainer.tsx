@@ -11,10 +11,25 @@ export type ExplainerProps = {
   bpm?: number;
   beatOffset?: number;
   palette?: string[];
+  /** Brand theme. `paper` is the text on a scene and the point cards; `ink` is the frame, kicker
+   *  and card text. For a light theme (dark text on pale scenes), pass the dark tone as `paper`. */
+  ink?: string;
+  paper?: string;
+  /** Caption highlight; defaults to a palette colour. */
+  accent?: string;
   captions?: boolean;
 };
 
-const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: number }> = ({ scene, color, t, pulse }) => {
+type Tones = { ink: string; paper: string };
+
+const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: number } & Tones> = ({
+  scene,
+  color,
+  t,
+  pulse,
+  ink: INK,
+  paper: PAPER,
+}) => {
   const { fps } = useVideoConfig();
   const local = Math.round((t - scene.start) * fps);
   // The panel settles without a bounce; the parts on it arrive one after another.
@@ -155,6 +170,9 @@ export const Explainer: React.FC<ExplainerProps> = ({
   bpm = 0,
   beatOffset = 0,
   palette = DEFAULT_PALETTE,
+  ink = INK,
+  paper = PAPER,
+  accent,
   captions = true,
 }) => {
   const frame = useCurrentFrame();
@@ -167,9 +185,16 @@ export const Explainer: React.FC<ExplainerProps> = ({
   const color = palette[Math.max(idx, 0) % palette.length];
 
   return (
-    <AbsoluteFill style={{ background: INK }}>
-      {scene && <SceneView scene={scene} color={color} t={t} pulse={pulse} />}
-      {captions && <Captions words={words} accent={palette[(Math.max(idx, 0) + 3) % palette.length]} />}
+    <AbsoluteFill style={{ background: ink }}>
+      {scene && <SceneView scene={scene} color={color} t={t} pulse={pulse} ink={ink} paper={paper} />}
+      {captions && (
+        <Captions
+          words={words}
+          accent={accent ?? palette[(Math.max(idx, 0) + 3) % palette.length]}
+          ink={ink}
+          paper={paper}
+        />
+      )}
     </AbsoluteFill>
   );
 };
