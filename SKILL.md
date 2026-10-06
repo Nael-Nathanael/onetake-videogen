@@ -174,8 +174,11 @@ design in `examples/cell/`): copy its structure for a new scene.
 4. **Anticipation, a 4-frame hit-pause and overshoot** on every big event. Depth layers, lighting and
    juice on the payoff.
 5. **Check headless**: `bun scripts/simcheck.ts` (NaNs, event frames) before any render.
-6. **Render**: `$S/run.sh remotion.py illustrated $J/visual.mp4 [--comp Cell] [--concurrency 3]`, muted
-   1280×720 at 60 fps (rendered from 1920×1080 with `--scale`). Run it inside a memory cap.
+6. **Render**: `$S/run.sh remotion.py illustrated $J/visual-v1.mp4 [--comp Cell] [--concurrency 3]`, muted
+   1280×720 at 60 fps (rendered from 1920×1080 with `--scale`). Wrap it in
+   `systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 --quiet bash -c '...'` (4G for stills
+   and strips), one heavy job at a time. Each round writes new versioned paths (`visual-v2.mp4`,
+   `strips-v2/`); never overwrite or delete earlier rounds in the same command.
 7. **Frame strips**: `$S/run.sh frames.py $J/visual.mp4 $J/strips 240 780:820:2` writes the frames and a
    contact sheet. Read every event's wind-up, hold, release and settle.
 8. **Sound**: music with a `--query` matching the confirmed tone, plus sound effects on every event (see
