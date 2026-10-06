@@ -270,6 +270,9 @@ def main():
     # Bed tempo follows the best track (within 6% of target); drop tracks that would need >8% stretch.
     bpm = a.bpm or min(max(good[0]["bpm"], target * 0.94), target * 1.06)
     good = [c for c in good if abs(c["bpm"] / bpm - 1) <= 0.08]
+    if not good:
+        raise SystemExit(f"no track within 8% of {bpm:.0f} BPM after picking the bed tempo; "
+                         "widen --query or pass a --bpm closer to the candidates (see candidates.json)")
     # Enough tracks to cover the video, best first; prefer variety over repeats.
     picked, covered = [], 0.0
     for c in good:
