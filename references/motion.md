@@ -108,6 +108,42 @@ You cannot watch the video, so read motion from frames.
 - Anything that renders fractional frames (`CameraMotionBlur`) breaks code that indexes per-frame data
   by integer frame. Interpolate between neighbouring frames first.
 
+## Motion blur
+
+`CameraMotionBlur` from `@remotion/motion-blur`, shutter 180°, 6 samples. At about 720 px/s the streaks
+reach about 6 px: film-like, not smeary. A 20 s 1080p60 scene took 157 s with blur against about 60 s
+without.
+
+- **Blur only the moving layer.** The blur sums N copies at 1/N opacity in 8-bit, so faint gradients
+  and low-alpha CSS-blurred layers band into rings. Render background, foreground, text and flashes
+  once, outside the blur wrapper. This is also faster.
+- **Keep light changes out of the shutter.** A flash or saturation spike that starts mid-shutter is
+  averaged down to half on its payoff frame. Drive light effects from the frame's own time.
+- **Trailing shutter.** Samples fall after the frame by default. Shift time back by
+  `1 - shutter/360/samples` so the newest sample is the frame itself: hit-pauses stay perfectly still,
+  and movers lead at their unblurred position.
+- **Unique SVG ids per sample.** All samples render in one page, so `clipPath`, `filter` and gradient
+  ids collide and every copy uses the first sample's shape.
+- Slow moves (under about 350 px/s) show almost no blur at 180°. That is correct; widen the shutter
+  only around chosen events, and only as an artistic choice.
+
+## Sound
+
+Motion lands harder with a sound on it. Score every event, even when the audio comes last.
+
+- Mix with ffmpeg after rendering, not with `<Audio>` in Remotion: a remix takes seconds instead of a
+  re-render, and loudness needs a limiter and `loudnorm`.
+- Put each SFX's loudest point on its event frame. Measure the peak (10 ms RMS) *after* pitch-shifting
+  and filtering, and compensate limiter delay (`alimiter` shifts 5 ms by default; set `latency=true`).
+- Tune tonal SFX (chimes, ticks, accents) to the music's key. Duck the music 3–5 dB under big hits. Big
+  hits sit about +6 dB over the music, light ones about −2 dB.
+- Sources: Freesound CC0 first (confirm the licence on each sound's own page), CC BY with credit. Keep a
+  manifest of URL, licence and credit per file.
+- Two-pass `loudnorm` silently switches to slow automatic gain when a plain gain change would break the
+  peak ceiling, which lifts the fade-in. Check that pass 2 reports `linear`; if not, put a lookahead
+  limiter in front. Target −16…−14 LUFS integrated, true peak ≤ −1 dBTP.
+- You cannot listen. Say so, and hand the mood, timbres and balance to a human.
+
 ## Safe rendering on a laptop
 
 - Never delete files in the same command as a render, and never use `rm -rf`. Write every round to new
