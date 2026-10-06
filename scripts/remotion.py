@@ -4,7 +4,7 @@ Render Remotion compositions from ~/OneTake/videogen/remotion (720p60).
 
   run.sh remotion.py explainer SCENES.json OUT.mp4 --words vo.words.json --duration SEC [--beats beats.json] [--theme theme.json]
   run.sh remotion.py titlecard OUT.mov --title "..." [--subtitle "..."] [--seconds 4] [--center]
-  run.sh remotion.py illustrated OUT.mp4 [--comp Cell] [--concurrency 3]
+  run.sh remotion.py illustrated OUT.mp4 [--comp Cell] [--concurrency 3] [--width 1920]
 
 SCENES.json: [{"start", "end", "layout": "title|points|big|quote", "kicker", "title", "emoji",
                "points": [{"text", "at"}]}]   (seconds on the narration timeline)
@@ -70,6 +70,7 @@ def main():
     i.add_argument("out")
     i.add_argument("--comp", default="Cell")
     i.add_argument("--concurrency", type=int, default=3)
+    i.add_argument("--width", type=int, default=TARGET_W, help="output width; 1920 renders 1080p unscaled")
     a = ap.parse_args()
 
     if a.cmd == "explainer":
@@ -83,7 +84,7 @@ def main():
                  **(load_json(a.theme) if a.theme else {})}
         render("Explainer", a.out, props, ["--muted", "--codec=h264", "--crf=18"])
     elif a.cmd == "illustrated":
-        render(a.comp, a.out, {}, ["--muted", "--codec=h264", "--crf=18", f"--scale={TARGET_W / ILLUSTRATED_W}",
+        render(a.comp, a.out, {}, ["--muted", "--codec=h264", "--crf=18", f"--scale={a.width / ILLUSTRATED_W}",
                                    f"--concurrency={a.concurrency}"])
     else:
         props = {"title": a.title, "subtitle": a.subtitle, "seconds": a.seconds, "accent": a.accent,
