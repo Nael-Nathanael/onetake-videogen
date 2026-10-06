@@ -177,7 +177,10 @@ design in `examples/cell/`): copy its structure for a new scene.
 6. **Render**: `$S/run.sh remotion.py illustrated $J/visual-v1.mp4 [--comp Cell] [--concurrency 3]`, muted
    1280×720 at 60 fps (rendered from 1920×1080 with `--scale`). Wrap it in
    `systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 --quiet bash -c '...'` (4G for stills
-   and strips), one heavy job at a time. Each round writes new versioned paths (`visual-v2.mp4`,
+   and strips), one heavy job at a time. `--concurrency 8` is the fastest on a 20-core laptop: a 600-frame
+   1080p benchmark took 61 s at 8, 63 s at 12 and 67 s at 16, because the workers queue on Chrome's
+   compositor and the encoder, not the CPU. Check with `npx remotion benchmark --concurrencies=4,8,12`.
+   `--width 1920` renders 1080p unscaled. Each round writes new versioned paths (`visual-v2.mp4`,
    `strips-v2/`); never overwrite or delete earlier rounds in the same command.
 7. **Frame strips**: `$S/run.sh frames.py $J/visual.mp4 $J/strips 240 780:820:2` writes the frames and a
    contact sheet. Read every event's wind-up, hold, release and settle.
