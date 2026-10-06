@@ -6,3 +6,4 @@ remotion/out/
 *.mp4
 *.mov
 *.wav
+examples/*/audio/music/
