@@ -1,6 +1,6 @@
 ---
 name: onetake-videogen
-description: Fully automatic local video production on an NVIDIA GPU, built on OneTake. Edits raw talking-head / screen recordings (Whisper transcript → removes fillers, retakes, long pauses → frame-accurate NVENC cut), burns pop word-by-word captions, adds royalty-free tempo-matched background music with ducking, Remotion title cards, and can generate Indonesian voice-over (VoxCPM2) plus animated explainer videos from a script or topic, and Kurzgesagt-style illustrated animation (AI-generated flat-vector art, soft-body physics in Remotion). Output 720p60 MP4, -14 LUFS. Use this whenever the user wants to edit, cut, clean up, caption, add music to, or produce a video — "edit video ini", "potong bagian salah", "bikin video explainer", "voice over", "tambahin musik", "animasi kayak Kurzgesagt", "/onetake-videogen" — even if they don't mention OneTake.
+description: Local video production on an NVIDIA GPU, built on OneTake. Edits raw talking-head and screen recordings (Whisper transcript → removes fillers, retakes and long pauses → frame-accurate NVENC cut), burns word-by-word captions, adds tempo-matched royalty-free music, sound effects on every beat, voice-over (VoxCPM2, Indonesian and 29 more languages), animated explainers from a topic or script, and Kurzgesagt-style illustrated animation (AI-generated flat-vector art, soft-body physics in Remotion). Use it whenever the user's goal involves making, editing or improving a video, in any language or wording, with or without a file: cutting mistakes, adding captions, music, sound effects, a voice-over or an intro, or turning a topic into an animation. It works out the right workflow from the request and confirms a short plan with the user before rendering. Output 720p60 MP4, -14 LUFS.
 ---
 
 # OneTake videogen
@@ -18,11 +18,12 @@ J=~/OneTake/storage/jobs/<short-name>           # one folder per video job; all 
 If `run.sh` reports a missing venv, the environment isn't installed: run `install.sh` from the
 skill directory (see README.md).
 
-The user asked for **full automation**: make editorial decisions yourself, render, and
-report what you cut and why. Don't stop to ask for approval mid-pipeline. Ask only when an
-input is missing (no file, no topic).
+**Confirm once, then run automatically** (see "Understand the request" below): one short plan
+confirmation before any heavy work, then every editorial decision is yours until the video is done.
 
-Production format is **1280×720, 60 fps** (sources above 720p are downscaled; 60 fps is kept).
+Production format is **1280×720**. Sources above 720p are downscaled; an edited recording keeps its own
+frame rate (30 fps stays 30 fps), and generated video (explainers, title cards, illustrated scenes)
+renders at 60 fps.
 
 ## Motion (all modes)
 
@@ -39,14 +40,59 @@ ASS captions follow the same rules. In short:
 
 Check motion in frame strips, not single stills.
 
-## Pick the mode
+## Understand the request, confirm once, then run
 
-| Input | Mode |
-|---|---|
-| A recording (camera, screen capture, podcast video) | **A. Edit** |
-| A topic, an outline, or a narration script (no footage) | **B. Explainer** |
-| Footage + "add voice-over/intro" | A, then splice a B-rendered intro, or `voiceover.py` + `mix.py --voice` |
-| Illustrated, organic animation: things that move, deform or split (cells, creatures, props), Kurzgesagt-style | **C. Illustrated animation** |
+Work from what the user wants the viewer to get, not from keywords in the request.
+
+1. **Look at the inputs.** Probe any file (`ffprobe`): duration, frame rate, whether it has speech,
+   camera or screen recording, aspect. Check whether it is **raw or already finished**: encoder or
+   `comment` metadata from an editor or Remotion, embedded or sidecar subtitles, music under the speech,
+   a script-clean transcript. Mode A on a finished video cuts its music bed mid-phrase; say so in the plan
+   and offer what still helps (captions, sound effects, a different file). Cheap checks:
+   `ffmpeg -af silencedetect=n=-40dB:d=1` (no silences at all under speech suggests a music bed) and
+   transcribing a 30 s sample (`ffmpeg -t 30` first). Read any script or outline.
+   Note the request's language and any audience, length or style it mentions.
+2. **Draft the plan.** Pick the mode by what the content needs:
+
+   | Signal | Mode |
+   |---|---|
+   | Raw footage with speech to clean up (camera, screen capture, podcast) | **A. Edit** |
+   | Information to explain: steps, lists, comparisons, numbers, from a topic, outline or script | **B. Explainer** |
+   | Something to *show* moving or transforming: biology, physics, a process, a creature, a story, or a Kurzgesagt-like look | **C. Illustrated animation**, narrated when it explains |
+   | Footage plus an intro or narration | A, then a B or C intro, or `voiceover.py` + `mix.py --voice` |
+
+   B or C: pick C when understanding depends on *seeing* something move or change (light scattering, a
+   cell dividing, an engine turning); pick B when the content is facts, steps or numbers that read well as
+   text. When both fit, recommend one and offer the other in the confirmation.
+
+   Then fill in the rest, each with a default you can justify from the request:
+   - **Length:** from the footage, the script (~140 words per minute) or the request; otherwise 1–2 min
+     for B, 20–60 s for C.
+   - **Language** of narration and captions: the request's language unless stated.
+   - **Tone:** calm and documentary or upbeat and punchy. It sets the motion feel, the music `--query` and
+     how many sound effects.
+   - **Captions** on or off, **voice** (generated, cloned from a sample, or none), **music** mood,
+     **sound effects** (none, light, or one per event). For an edit (A), add only what the request asks
+     for; list the rest as optional extras, off by default. Generated videos (B, C) default to music and
+     sound effects on.
+   - For A: how hard to cut (keep personality, or tight and fast).
+3. **Confirm in one step.** Show the whole plan as one short list, in the request's language, so the user
+   can correct anything. Then ask with `AskUserQuestion` when available (without it, one short message):
+   - Ask only about choices that are still open and would materially change the video: at most 4 questions, 2–4
+     options each, your pick first and marked "(Recommended)", headers of 12 characters or less. A
+     finished file where raw footage was expected, an unclear audience or a B-or-C call are open; things
+     the request already fixed are not.
+   - When nothing is open, ask a single question: go with this plan, or adjust.
+   - When the user said not to ask (for example "langsung aja", "just do it"), don't ask: show the plan in
+     one line and start. The exception is an input that contradicts the request, such as a finished file
+     sent as a raw recording; ask that one question anyway, because the requested work would damage it.
+     Only confirmed evidence counts as a contradiction: editor or Remotion metadata, subtitles, or music
+     heard in the 30 s sample. Missing silences alone is a hint, not proof: run the sample check (it is
+     cheap, so run it even after "langsung aja"), and if it finds nothing, note the hint in the plan and
+     proceed.
+4. **Run without stopping.** After the answer, make every editorial decision yourself (what to cut,
+   scene timing, cue placement) and don't ask again mid-pipeline. Ask again only if an input turns out
+   missing or unusable (no file, corrupt file, no speech where speech was expected).
 
 ## A. Edit a recording
 
@@ -82,12 +128,13 @@ Check motion in frame strips, not single stills.
 
 ## B. Explainer from a topic or script
 
-1. **Script** — if given only a topic, write the narration in natural spoken Indonesian (short sentences,
+1. **Script** — if given only a topic, write the narration as natural speech in the confirmed narration language (short sentences,
    conversational, hook in the first line, ~140 words per minute of target length). Save as `$J/script.txt`,
    paragraphs = scenes. `[pause 1.0]` on its own paragraph adds silence.
 2. **Voice-over**: `$S/run.sh voiceover.py $J/script.txt $J/vo.wav` (consistent voice from `--voice "(description)"`;
    or clone with `--ref sample.wav --ref-text "transcript"`). First run downloads the model (~several GB).
-3. **Word timings**: `$S/run.sh transcribe.py $J/vo.wav $J/vo --lang id` → `$J/vo/words.json`.
+3. **Word timings**: `$S/run.sh transcribe.py $J/vo.wav $J/vo --lang id` → `$J/vo/words.json` (`--lang` = the
+   narration language, e.g. `en`).
 4. **Scenes**: write `$J/scenes.json` from the transcript timings — one scene per idea, 4–10 s each, so the
    screen changes often (keeps it from feeling monotonous):
    ```json
@@ -109,7 +156,9 @@ holds the pipeline, the reasons behind each choice, the soft-body recipe and the
 illustration. The worked example is the `Cell` composition (`remotion/src/illustrated/cell/`, sound
 design in `examples/cell/`): copy its structure for a new scene.
 
-1. **Beat sheet**: one focal mover per beat, with its anticipation and payoff.
+1. **Beat sheet**: one focal mover per beat, with its anticipation and payoff. When the scene explains
+   something, write and voice the narration first (B steps 1–3) and time each beat to the word that names
+   it.
 2. **Art**: a flat-vector sprite sheet from Gemini on a solid background, then
    `$S/run.sh split.py SHEET.png $J/parts` (flags: `--bg auto|#rrggbb`, `--threshold 40`, `--downsample 4`,
    `--min-area 200`, `--vtracer "<opts>"`). It writes `aNN.svg` per part, a labelled check sheet and
@@ -126,8 +175,8 @@ design in `examples/cell/`): copy its structure for a new scene.
    1280×720 at 60 fps (rendered from 1920×1080 with `--scale`). Run it inside a memory cap.
 7. **Frame strips**: `$S/run.sh frames.py $J/visual.mp4 $J/strips 240 780:820:2` writes the frames and a
    contact sheet. Read every event's wind-up, hold, release and settle.
-8. **Sound**: music with a calm `--query`, plus sound effects on every event (see Sound effects). Mix as
-   in B, adding `--sfx`.
+8. **Sound**: music with a `--query` matching the confirmed tone, plus sound effects on every event (see
+   Sound effects). Mix as in B (`--voice $J/vo.wav` when narrated), adding `--sfx`.
 
 ## Music: tempo-matched, royalty-free
 
@@ -173,7 +222,8 @@ Give the user `$J/audio/CREDITS.txt` with the music credits.
 
 ## Report back
 
-When done, tell the user: final path, duration before → after, a short list of what was cut (counts + the
+When done, tell the user: final path, any place where you departed from the confirmed plan and why,
+duration before → after, a short list of what was cut (counts + the
 notable retakes), the music track(s) with tempo and the credits text, and render times. With sound effects,
 add cuecheck's worst offset, the loudness and whether the loudness pass stayed linear. Keep job folders;
 `~/OneTake/storage/jobs` is not auto-cleaned (disk is the user's call).

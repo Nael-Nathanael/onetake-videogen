@@ -62,8 +62,10 @@ In Claude Code:
 /onetake-videogen animasi kayak Kurzgesagt: sel membelah diri
 ```
 
-The skill also triggers on plain requests such as "potong bagian yang salah ucap di video ini, kasih caption dan musik".
-It decides what to cut by itself, renders the video, then reports what it removed and which music it used.
+Plain requests in any wording work too, such as "potong bagian yang salah ucap di video ini, kasih caption dan musik".
+The skill works out the plan from the request and the files (mode, length, tone, captions, voice, music, sound
+effects) and asks you to confirm it once. Then it cuts and renders on its own and reports what it removed and which
+music it used.
 
 Every job writes to `~/OneTake/storage/jobs/<name>/`:
 
