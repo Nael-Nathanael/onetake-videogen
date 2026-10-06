@@ -69,7 +69,7 @@ fi
 say "OneTake Python env (faster-whisper, CUDA libs, librosa)"
 [[ -x .venv/bin/python ]] || "$PYTHON" -m venv .venv
 .venv/bin/pip install -q --upgrade pip
-.venv/bin/pip install -q -r requirements.txt librosa soundfile
+.venv/bin/pip install -q -r requirements.txt librosa soundfile pillow
 
 if [[ $WITH_TTS == 1 ]]; then
   say "VoxCPM2 voice-over env (PyTorch, a few GB)"
@@ -84,6 +84,15 @@ say "OneTake web UI dependencies"
 
 say "Remotion"
 (cd "$REPO/remotion" && npm install --no-audit --no-fund --silent)
+
+say "vtracer (illustrated mode: traces generated art to SVG)"
+if ! command -v vtracer >/dev/null; then
+  if command -v cargo >/dev/null; then
+    cargo install vtracer
+  else
+    echo "note: install Rust, then run 'cargo install vtracer' to use scripts/split.py"
+  fi
+fi
 
 if [[ $LINK == 1 ]]; then
   SKILLS="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills"

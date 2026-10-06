@@ -16,8 +16,9 @@ skill and tooling around it:
 | Music | Royalty-free tracks (CC0 / CC BY) picked to match the speaking pace, time-stretched to one tempo, crossfaded on bar lines, ending exactly on the last frame, ducked under speech | Openverse, librosa, rubberband |
 | Voice-over | Indonesian (and 29 other languages) narration with a consistent or cloned voice | [VoxCPM2](https://github.com/OpenBMB/VoxCPM) |
 | Motion graphics | Title cards, and full animated explainer videos where scene changes snap to the beat. All motion, captions included, uses one rig: staggered springs, parts that trail their parent, area-preserving squash, eased exits, calm idle motion. Rules: [`references/motion.md`](references/motion.md) | [Remotion](https://www.remotion.dev) |
-| Illustrated animation | Kurzgesagt-style scenes: Gemini flat-vector art traced to SVG, soft bodies from a deterministic physics sim, anticipation and overshoot on every event. Guide: [`references/illustrated-animation.md`](references/illustrated-animation.md) | Remotion, vtracer |
-| Mix | Speech + music, loudness normalised to −14 LUFS | ffmpeg |
+| Illustrated animation | Kurzgesagt-style scenes: Gemini flat-vector art traced to SVG (`split.py`), soft bodies from a deterministic physics sim, anticipation and overshoot on every event, motion blur. Worked example: the `Cell` composition (a cell dividing, 20 s). Guide: [`references/illustrated-animation.md`](references/illustrated-animation.md) | Remotion, vtracer |
+| Sound effects | CC0 / CC BY sounds searched and fetched with a licence manifest (`sfx.py`), each cue's loudest point placed on its frame, tonal cues tuned to the music, music ducked under big hits; `cuecheck.py` verifies every cue within one frame | Openverse, ffmpeg |
+| Mix | Speech + music (+ sound effects), loudness normalised to −14 LUFS | ffmpeg |
 
 Output: 1280×720 at 60 fps, H.264/AAC MP4.
 
@@ -34,6 +35,7 @@ Output: 1280×720 at 60 fps, H.264/AAC MP4.
 - Python 3.10–3.12.
 - Node.js 20+.
 - Google Chrome. This is optional: Remotion downloads its own headless shell if Chrome isn't installed.
+- For illustrated animation: [vtracer](https://github.com/visioncortex/vtracer) (`cargo install vtracer`; `install.sh` does this when Rust is present) and [Bun](https://bun.sh) for the headless simulation check.
 
 ## Install
 
@@ -43,7 +45,7 @@ cd ~/oss/onetake-videogen
 ./install.sh            # add --no-tts to skip VoxCPM2/PyTorch
 ```
 
-`install.sh` is idempotent. It does the following:
+`install.sh` is idempotent; re-run it after pulling to pick up new dependencies. It does the following:
 
 1. Clones OneTake into `$ONETAKE_HOME` (default `~/OneTake`), pinned to the commit the patch targets.
 2. Applies `patches/onetake-gpu-longvideo.patch`.
@@ -57,6 +59,7 @@ In Claude Code:
 ```
 /onetake-videogen edit ~/Videos/rekaman-mentah.mp4
 /onetake-videogen bikin video explainer 2 menit tentang cara kerja kompresi video
+/onetake-videogen animasi kayak Kurzgesagt: sel membelah diri
 ```
 
 The skill also triggers on plain requests such as "potong bagian yang salah ucap di video ini, kasih caption dan musik".
@@ -88,3 +91,4 @@ The patched OneTake web editor is still available for manual edits: `~/OneTake/s
 - **Remotion:** free for individuals, non-profits and companies with up to 3 people. Larger companies need a [company license](https://www.remotion.dev/license).
 - **Music:** fetched at run time and limited to CC0 and CC BY. CC BY requires attribution, which is why `CREDITS.txt` is written. Some Jamendo tracks are registered with YouTube Content ID and can still get claimed. For monetised channels, prefer your own library in `~/Music/bgm` (for example, YouTube Audio Library downloads).
 - **Models:** faster-whisper/Whisper weights are MIT. VoxCPM2 is Apache-2.0.
+- **Cell example assets:** the part SVGs in `remotion/public/illustrated/cell/` were generated with Google Gemini and traced with vtracer (see `CREDITS.md` there). The sound effects in `examples/cell/audio/` are CC0 (listed in `CREDITS.txt` for provenance). The example's music is CC BY 3.0 and is not committed; `sfx.py fetch --refetch` downloads it from the manifest.

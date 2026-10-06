@@ -20,7 +20,8 @@ verification and safe rendering are in `motion.md`; this file adds what is speci
    One roll gave a clean cell body, nucleus, mitochondria, vesicles and chromosomes. One chromosome
    came out broken; drop pieces like that. Gemini's download step can take more than a minute, so use
    a timeout of at least 120 s.
-3. **Split and trace.**
+3. **Split and trace.** `scripts/split.py` does all of this; its flags cover the background colour,
+   threshold, downsample factor, minimum area and vtracer options.
    - Mask each pixel by its distance from the background colour, using a soft alpha ramp so the
      anti-aliased edges stay smooth.
    - Find connected components on a 4× downsampled mask, then crop each with padding.
@@ -32,7 +33,9 @@ verification and safe rendering are in `motion.md`; this file adds what is speci
    must be code. A traced sprite cannot change shape. Colour the code shapes with values sampled from
    the generated art so they match the sprites.
 5. **Build** at 1920×1080, 60 fps, with physics for anything soft (see the soft-body recipe below)
-   and eased curves for designed moves. Keep the event times as named constants in one place.
+   and eased curves for designed moves. Keep the event times as named constants in one place. Start
+   from the `Cell` example in `remotion/src/illustrated/cell/` (`sim.ts` for the physics, `Cell.tsx`
+   for drawing, blur and layers). The skill renders it at 720p60 with `--scale`.
 6. **Verify** (see the Verify section below), fix, and repeat.
 
 ## What made it smooth
@@ -117,7 +120,8 @@ identical frames. A 1200-frame run takes about 0.6 s.
 
 On top of the frame strips and checklist in `motion.md`:
 
-- **Headless simulation check before any render.** A script that runs the simulation and prints:
+- **Headless simulation check before any render** (`bun scripts/simcheck.ts` for the example). A script
+  that runs the simulation and prints:
   - NaNs
   - the frame each event fires on
   - per 0.5 s, the radius spread of each ring (the jiggle amplitude and how it settles)

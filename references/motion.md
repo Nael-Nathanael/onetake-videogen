@@ -86,6 +86,7 @@ You cannot watch the video, so read motion from frames.
 
 - **Frame strips** around every entrance, exit and event: every 2nd–4th frame for 20–40 frames. Check
   that one thing starts at a time, children trail their parent, overshoot settles, and exits ease.
+  `scripts/frames.py VIDEO OUT_DIR 240 780:820:2` extracts frames and builds the contact sheet.
 - Extract frames by index (`-vf "select=eq(n\,N)"`) and composite them afterwards. With an alpha MOV,
   combining `-ss` with an `overlay` against a `color` source can emit a background-only frame, which
   looks like a broken render.
@@ -112,7 +113,8 @@ You cannot watch the video, so read motion from frames.
 
 `CameraMotionBlur` from `@remotion/motion-blur`, shutter 180°, 6 samples. At about 720 px/s the streaks
 reach about 6 px: film-like, not smeary. A 20 s 1080p60 scene took 157 s with blur against about 60 s
-without.
+without. Helpers in `remotion/src/illustrated/shared.ts`: `sampleAt` blends per-frame data at fractional
+frames, `trailingShift(shutter, samples)` gives the time offset below.
 
 - **Blur only the moving layer.** The blur sums N copies at 1/N opacity in 8-bit, so faint gradients
   and low-alpha CSS-blurred layers band into rings. Render background, foreground, text and flashes
@@ -131,17 +133,26 @@ without.
 
 Motion lands harder with a sound on it. Score every event, even when the audio comes last.
 
+`sfx.py` and `mix.py --sfx` implement the points below; `cuecheck.py` verifies placement (SKILL.md,
+"Sound effects").
+
 - Mix with ffmpeg after rendering, not with `<Audio>` in Remotion: a remix takes seconds instead of a
   re-render, and loudness needs a limiter and `loudnorm`.
 - Put each SFX's loudest point on its event frame. Measure the peak (10 ms RMS) *after* pitch-shifting
   and filtering, and compensate limiter delay (`alimiter` shifts 5 ms by default; set `latency=true`).
-- Tune tonal SFX (chimes, ticks, accents) to the music's key. Duck the music 3–5 dB under big hits. Big
-  hits sit about +6 dB over the music, light ones about −2 dB.
+- Tune tonal SFX (chimes, ticks, accents) to the music's key. Duck the music 3–5 dB under big hits.
+  Measured as a cue's loudest 10 ms over the speech/music RMS, big hits sit at +9 to +11 dB, light ones
+  at +4 to +6 dB.
 - Sources: Freesound CC0 first (confirm the licence on each sound's own page), CC BY with credit. Keep a
-  manifest of URL, licence and credit per file.
+  manifest of URL, licence and credit per file. Refuse sounds from deleted accounts: their licence can
+  no longer be checked.
 - Two-pass `loudnorm` silently switches to slow automatic gain when a plain gain change would break the
   peak ceiling, which lifts the fade-in. Check that pass 2 reports `linear`; if not, put a lookahead
   limiter in front. Target −16…−14 LUFS integrated, true peak ≤ −1 dBTP.
+- ffmpeg 8 `loudnorm` also refuses linear mode when the measured loudness range exceeds its target.
+  Raise the target to the measured range; in linear mode it is one gain, so nothing gets compressed.
+- `alimiter` limits sample peaks. Run it 4× oversampled, or the true peak overshoots by about 0.75 dB.
+- AAC encoding adds 0.2–0.4 dB of true peak; aim about −2 dBTP before encoding to stay under −1.5 after.
 - You cannot listen. Say so, and hand the mood, timbres and balance to a human.
 
 ## Safe rendering on a laptop

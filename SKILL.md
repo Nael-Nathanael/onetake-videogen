@@ -106,19 +106,28 @@ Check motion in frame strips, not single stills.
 
 Read `references/motion.md`, then `references/illustrated-animation.md`, before starting. The second
 holds the pipeline, the reasons behind each choice, the soft-body recipe and the extra checks for
-illustration. In short:
+illustration. The worked example is the `Cell` composition (`remotion/src/illustrated/cell/`, sound
+design in `examples/cell/`): copy its structure for a new scene.
 
-1. Beat sheet: one focal mover per beat, with its anticipation and payoff.
-2. Flat-vector sprite sheet from Gemini on a solid background. Split it, trace each part with
-   `vtracer`, and drop broken pieces.
-3. Draw in code anything that deforms or splits; traced sprites can't change shape.
-4. Remotion at 1920×1080, 60 fps. Soft things come from a precomputed, deterministic
-   position-based-dynamics simulation, not from sine wobble.
-5. Anticipation, a 4-frame hit-pause and overshoot on every big event. Depth layers, lighting and
+1. **Beat sheet**: one focal mover per beat, with its anticipation and payoff.
+2. **Art**: a flat-vector sprite sheet from Gemini on a solid background, then
+   `$S/run.sh split.py SHEET.png $J/parts` (flags: `--bg auto|#rrggbb`, `--threshold 40`, `--downsample 4`,
+   `--min-area 200`, `--vtracer "<opts>"`). It writes `aNN.svg` per part, a labelled check sheet and
+   `assets.json`. Drop broken pieces; copy the kept SVGs to `remotion/public/illustrated/<scene>/`.
+3. **Build** in `remotion/src/illustrated/<scene>/`, authored at 1920×1080 and registered in `Root.tsx`.
+   Draw in code anything that deforms or splits. Soft things come from a precomputed, deterministic
+   position-based-dynamics simulation, not from sine wobble. Shared helpers: `illustrated/shared.ts`
+   (`sampleAt` fractional-frame blending, `trailingShift` for motion blur) and `motion.ts`
+   (`squashAlong`).
+4. **Anticipation, a 4-frame hit-pause and overshoot** on every big event. Depth layers, lighting and
    juice on the payoff.
-6. Verify headless, then with stills, frame strips around each event, and frames from the final MP4.
-   Render inside a memory cap.
-7. Music: `music.py` with a calm `--query`. Mix as in B.
+5. **Check headless**: `bun scripts/simcheck.ts` (NaNs, event frames) before any render.
+6. **Render**: `$S/run.sh remotion.py illustrated $J/visual.mp4 [--comp Cell] [--concurrency 3]`, muted
+   1280×720 at 60 fps (rendered from 1920×1080 with `--scale`). Run it inside a memory cap.
+7. **Frame strips**: `$S/run.sh frames.py $J/visual.mp4 $J/strips 240 780:820:2` writes the frames and a
+   contact sheet. Read every event's wind-up, hold, release and settle.
+8. **Sound**: music with a calm `--query`, plus sound effects on every event (see Sound effects). Mix as
+   in B, adding `--sfx`.
 
 ## Music: tempo-matched, royalty-free
 
@@ -134,10 +143,39 @@ illustration. In short:
 - **Always give the user `$J/music/CREDITS.txt`** — CC BY requires attribution in the video description.
   Jamendo tracks can still trigger YouTube Content ID claims; mention it if they monetise.
 
+## Sound effects (any mode)
+
+Motion lands harder with a sound on it: a pop for a title card, a tick per list point, a whoosh on a
+scene change, a cue per event in an illustrated scene. Pass absolute paths (`run.sh` changes directory).
+
+1. **Search**: `$S/run.sh sfx.py search $J/sfx-search.json "bubble pop" "water drop" [--max-dur 6]`. CC0 and
+   CC BY only; pick ids from the printed table.
+2. **Fetch**: `$S/run.sh sfx.py fetch $J/audio name=OPENVERSE_ID ... [--music name=ID]`. Writes
+   `manifest.json` (licence, credit, sha256, measured peak offset) and `CREDITS.txt`. It refuses creators
+   whose account is deleted, because their licence can no longer be checked. Check the source page of any
+   CC BY item. `--refetch` restores missing files from a manifest.
+3. **Cues**: write `$J/cues.json`. `at` is where the sound's loudest point lands (seconds = frame / fps).
+   `gain_db` is relative to the speech/music level: big hits about +9 to +11, light ones +4 to +6.
+   ```json
+   {"manifest": "audio/manifest.json", "cues": [
+     {"name": "burst", "file": "burst-squish", "at": 4.0, "gain_db": 9, "lowpass_hz": 7000, "duck_db": 4},
+     {"name": "chime", "file": "chime-kalimba-e5", "at": 4.95, "gain_db": 4, "pan": 0.4,
+      "pitch_hz": 587.33, "source_hz": 666.0, "lowpass_hz": 5000, "keep_s": 1.6}]}
+   ```
+   Optional fields: `pan` (-1..1), `pitch_hz` (tune tonal cues to the music's key; give `source_hz` for
+   chirpy sounds), `lowpass_hz`, `keep_s`, `duck_db` (music dip, 3–5 dB for big hits).
+4. **Mix**: `$S/run.sh mix.py VIDEO $J/final.mp4 [--voice ...] [--music ...] --sfx $J/cues.json`. Each cue's
+   loudest point is placed on its `at` after processing; the loudness pass must stay linear (reported in
+   `final.mp4.sfx.json`). `--sfx` is optional; without it `mix.py` mixes speech and music only.
+5. **Check**: `$S/run.sh cuecheck.py $J/final.mp4` must print PASS (every cue within one frame).
+
+Give the user `$J/audio/CREDITS.txt` with the music credits.
+
 ## Report back
 
 When done, tell the user: final path, duration before → after, a short list of what was cut (counts + the
-notable retakes), the music track(s) with tempo and the credits text, and render times. Keep job folders;
+notable retakes), the music track(s) with tempo and the credits text, and render times. With sound effects,
+add cuecheck's worst offset, the loudness and whether the loudness pass stayed linear. Keep job folders;
 `~/OneTake/storage/jobs` is not auto-cleaned (disk is the user's call).
 
 ## Troubleshooting
@@ -150,4 +188,8 @@ notable retakes), the music track(s) with tempo and the credits text, and render
 - **Remotion**: uses an installed Chrome (`REMOTION_BROWSER_EXECUTABLE`, default `/usr/bin/google-chrome`) when present,
   otherwise downloads its own headless shell. It does not need Playwright browsers.
   Remotion is free for individuals and companies ≤3 people; larger companies need a Remotion company licence.
+- **`No module named 'PIL'`, missing `@remotion/motion-blur`, or `vtracer: command not found`**: the install
+  predates illustrated mode; rerun `install.sh`. vtracer needs Rust (`cargo install vtracer`).
+- **`cuecheck.py` FAIL**: a cue's source file changed or `at` points past the video; rerun `mix.py --sfx` and
+  check `OUT.sfx.json` for the placed times.
 - Fresh machine or broken env: rerun `install.sh` (idempotent).
