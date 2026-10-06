@@ -6,7 +6,7 @@ import { fontFamily, INK, PAPER, Word } from "./theme";
 const MAX_WORDS = 6;
 
 /** Group words into short caption lines, breaking on punctuation, pauses and length. */
-const toLines = (words: Word[]) => {
+export const toLines = (words: Word[]) => {
   const lines: Word[][] = [];
   let cur: Word[] = [];
   words.forEach((w, i) => {
