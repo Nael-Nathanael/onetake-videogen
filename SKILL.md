@@ -1,6 +1,6 @@
 ---
 name: onetake-videogen
-description: Fully automatic local video production on an NVIDIA GPU, built on OneTake. Edits raw talking-head / screen recordings (Whisper transcript → removes fillers, retakes, long pauses → frame-accurate NVENC cut), burns pop word-by-word captions, adds royalty-free tempo-matched background music with ducking, Remotion title cards, and can generate Indonesian voice-over (VoxCPM2) plus animated explainer videos from a script or topic. Output 720p60 MP4, -14 LUFS. Use this whenever the user wants to edit, cut, clean up, caption, add music to, or produce a video — "edit video ini", "potong bagian salah", "bikin video explainer", "voice over", "tambahin musik", "/onetake-videogen" — even if they don't mention OneTake.
+description: Fully automatic local video production on an NVIDIA GPU, built on OneTake. Edits raw talking-head / screen recordings (Whisper transcript → removes fillers, retakes, long pauses → frame-accurate NVENC cut), burns pop word-by-word captions, adds royalty-free tempo-matched background music with ducking, Remotion title cards, and can generate Indonesian voice-over (VoxCPM2) plus animated explainer videos from a script or topic, and Kurzgesagt-style illustrated animation (AI-generated flat-vector art, soft-body physics in Remotion). Output 720p60 MP4, -14 LUFS. Use this whenever the user wants to edit, cut, clean up, caption, add music to, or produce a video — "edit video ini", "potong bagian salah", "bikin video explainer", "voice over", "tambahin musik", "animasi kayak Kurzgesagt", "/onetake-videogen" — even if they don't mention OneTake.
 ---
 
 # OneTake videogen
@@ -31,6 +31,7 @@ Production format is **1280×720, 60 fps** (sources above 720p are downscaled; 6
 | A recording (camera, screen capture, podcast video) | **A. Edit** |
 | A topic, an outline, or a narration script (no footage) | **B. Explainer** |
 | Footage + "add voice-over/intro" | A, then splice a B-rendered intro, or `voiceover.py` + `mix.py --voice` |
+| Illustrated, organic animation: things that move, deform or split (cells, creatures, props), Kurzgesagt-style | **C. Illustrated animation** |
 
 ## A. Edit a recording
 
@@ -85,6 +86,23 @@ Production format is **1280×720, 60 fps** (sources above 720p are downscaled; 6
 6. **Render**: `$S/run.sh remotion.py explainer $J/scenes.json $J/visual.mp4 --words $J/vo/words.json --duration <vo duration> --beats $J/music/beats.json`
    Scene changes snap to the nearest beat; accents pulse on the beat.
 7. **Mix**: `$S/run.sh mix.py $J/visual.mp4 $J/final.mp4 --voice $J/vo.wav --music $J/music/bed.wav`
+
+## C. Illustrated animation
+
+Read `references/illustrated-animation.md` before starting. It holds the pipeline, the reasons behind
+each choice, the soft-body recipe, Remotion pitfalls and the verification checklist. In short:
+
+1. Beat sheet: one focal mover per beat, with its anticipation and payoff.
+2. Flat-vector sprite sheet from Gemini on a solid background. Split it, trace each part with
+   `vtracer`, and drop broken pieces.
+3. Draw in code anything that deforms or splits; traced sprites can't change shape.
+4. Remotion at 1920×1080, 60 fps. Soft things come from a precomputed, deterministic
+   position-based-dynamics simulation, not from sine wobble.
+5. Anticipation, a 4-frame hit-pause and overshoot on every big event. Depth layers, lighting and
+   juice on the payoff.
+6. Verify headless, then with stills, frame strips around each event, and frames from the final MP4.
+   Render inside a memory cap.
+7. Music: `music.py` with a calm `--query`. Mix as in B.
 
 ## Music: tempo-matched, royalty-free
 
