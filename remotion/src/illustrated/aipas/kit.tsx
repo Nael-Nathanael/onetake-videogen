@@ -19,7 +19,7 @@ export const MONO = loadGeistMono("normal", { weights: ["500"], subsets: ["latin
 // ---------- Timeline ----------
 
 export const FPS = 30;
-export const DURATION = 5007;
+export const DURATION = 5105;
 export const f = (s: number) => Math.round(s * FPS);
 
 export type SpokenWord = { text: string; start: number; end: number; para: number; guess?: boolean };

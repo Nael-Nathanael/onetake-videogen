@@ -3,1979 +3,1974 @@
   {
    "text": "Mau",
    "start": 0.0,
-   "end": 0.12,
+   "end": 0.56,
    "para": 0
   },
   {
    "text": "pakai",
-   "start": 0.12,
-   "end": 0.42,
+   "start": 0.56,
+   "end": 0.8,
    "para": 0
   },
   {
    "text": "AI?",
-   "start": 0.42,
-   "end": 0.74,
+   "start": 0.8,
+   "end": 1.16,
    "para": 0
   },
   {
    "text": "Banyak",
-   "start": 1.0,
-   "end": 1.34,
+   "start": 1.74,
+   "end": 2.6,
    "para": 0
   },
   {
    "text": "yang",
-   "start": 1.34,
-   "end": 1.46,
+   "start": 2.6,
+   "end": 2.82,
    "para": 0
   },
   {
    "text": "langsung",
-   "start": 1.46,
-   "end": 1.72,
+   "start": 2.82,
+   "end": 3.18,
    "para": 0
   },
   {
    "text": "minta",
-   "start": 1.72,
-   "end": 2.02,
+   "start": 3.18,
+   "end": 3.54,
    "para": 0
   },
   {
    "text": "ChatGPT.",
-   "start": 2.02,
-   "end": 2.8,
+   "start": 3.54,
+   "end": 4.44,
    "para": 0,
    "guess": true
   },
   {
    "text": "Itu",
-   "start": 3.2,
-   "end": 3.82,
+   "start": 4.76,
+   "end": 5.28,
    "para": 1
   },
   {
    "text": "seperti",
-   "start": 3.82,
-   "end": 4.24,
+   "start": 5.28,
+   "end": 5.68,
    "para": 1
   },
   {
    "text": "menyewa",
-   "start": 4.24,
-   "end": 5.1,
+   "start": 5.68,
+   "end": 6.18,
    "para": 1
   },
   {
    "text": "paus",
-   "start": 5.1,
-   "end": 5.5,
+   "start": 6.18,
+   "end": 6.74,
    "para": 1
   },
   {
    "text": "untuk",
-   "start": 5.5,
-   "end": 5.8,
+   "start": 6.74,
+   "end": 7.1,
    "para": 1
   },
   {
    "text": "mengantar",
-   "start": 5.8,
-   "end": 6.28,
+   "start": 7.1,
+   "end": 7.62,
    "para": 1
   },
   {
    "text": "satu",
-   "start": 6.28,
-   "end": 6.5,
+   "start": 7.62,
+   "end": 7.88,
    "para": 1
   },
   {
    "text": "surat.",
-   "start": 6.5,
-   "end": 7.0,
+   "start": 7.88,
+   "end": 8.24,
    "para": 1
   },
   {
    "text": "Bisa.",
-   "start": 7.0,
-   "end": 7.16,
-   "para": 1,
-   "guess": true
+   "start": 8.58,
+   "end": 9.24,
+   "para": 1
   },
   {
    "text": "Tapi",
-   "start": 7.16,
-   "end": 7.36,
+   "start": 9.58,
+   "end": 10.0,
    "para": 1
   },
   {
    "text": "AI",
-   "start": 7.36,
-   "end": 8.56,
+   "start": 10.0,
+   "end": 10.56,
    "para": 1
   },
   {
    "text": "bukan",
-   "start": 8.56,
-   "end": 8.92,
+   "start": 10.56,
+   "end": 11.1,
    "para": 1
   },
   {
    "text": "cuma",
-   "start": 8.92,
-   "end": 9.2,
+   "start": 11.1,
+   "end": 11.34,
    "para": 1
   },
   {
    "text": "paus.",
-   "start": 9.2,
-   "end": 9.76,
+   "start": 11.34,
+   "end": 11.8,
    "para": 1
   },
   {
    "text": "Ada",
-   "start": 10.0,
-   "end": 10.7,
+   "start": 12.16,
+   "end": 12.84,
    "para": 2
   },
   {
    "text": "empat",
-   "start": 10.7,
-   "end": 11.1,
+   "start": 12.84,
+   "end": 13.2,
    "para": 2
   },
   {
    "text": "jenis",
-   "start": 11.1,
-   "end": 11.38,
+   "start": 13.2,
+   "end": 13.52,
    "para": 2
   },
   {
    "text": "AI.",
-   "start": 11.38,
-   "end": 11.8,
+   "start": 13.52,
+   "end": 13.88,
    "para": 2
   },
   {
    "text": "Yang",
-   "start": 11.8,
-   "end": 12.38,
+   "start": 14.12,
+   "end": 14.58,
    "para": 2
   },
   {
    "text": "menentukan",
-   "start": 12.38,
-   "end": 12.86,
+   "start": 14.58,
+   "end": 15.02,
    "para": 2
   },
   {
    "text": "pilihannya:",
-   "start": 12.86,
-   "end": 13.54,
+   "start": 15.02,
+   "end": 15.66,
    "para": 2
   },
   {
    "text": "data",
-   "start": 13.54,
-   "end": 14.42,
+   "start": 16.16,
+   "end": 16.6,
    "para": 2
   },
   {
    "text": "dan",
-   "start": 14.42,
-   "end": 14.86,
+   "start": 16.84,
+   "end": 16.98,
    "para": 2
   },
   {
    "text": "kebutuhan",
-   "start": 14.86,
-   "end": 15.36,
+   "start": 16.98,
+   "end": 17.42,
    "para": 2
   },
   {
    "text": "Anda.",
-   "start": 15.36,
-   "end": 15.74,
+   "start": 17.42,
+   "end": 17.72,
    "para": 2
   },
   {
    "text": "Laporan",
-   "start": 15.74,
-   "end": 16.94,
+   "start": 18.34,
+   "end": 19.16,
    "para": 3
   },
   {
    "text": "harian",
-   "start": 16.94,
-   "end": 17.42,
+   "start": 19.16,
+   "end": 19.72,
    "para": 3
   },
   {
    "text": "atau",
-   "start": 17.42,
-   "end": 17.76,
+   "start": 19.72,
+   "end": 20.16,
    "para": 3
   },
   {
    "text": "persetujuan",
-   "start": 17.76,
-   "end": 18.5,
+   "start": 20.16,
+   "end": 20.84,
    "para": 3
   },
   {
    "text": "berjenjang,",
-   "start": 18.5,
-   "end": 19.22,
+   "start": 20.84,
+   "end": 21.54,
    "para": 3
   },
   {
    "text": "aturannya",
-   "start": 19.22,
-   "end": 20.18,
+   "start": 22.04,
+   "end": 22.36,
    "para": 3
   },
   {
    "text": "sudah",
-   "start": 20.18,
-   "end": 20.56,
+   "start": 22.36,
+   "end": 22.56,
    "para": 3
   },
   {
    "text": "pasti.",
-   "start": 20.56,
-   "end": 21.06,
+   "start": 22.56,
+   "end": 22.96,
    "para": 3
   },
   {
    "text": "Seperti",
-   "start": 21.74,
-   "end": 22.18,
+   "start": 23.4,
+   "end": 24.02,
    "para": 3
   },
   {
    "text": "semut",
-   "start": 22.18,
-   "end": 22.94,
+   "start": 24.02,
+   "end": 24.34,
    "para": 3
   },
   {
    "text": "di",
-   "start": 22.94,
-   "end": 23.12,
+   "start": 24.34,
+   "end": 24.5,
    "para": 3
   },
   {
    "text": "jalurnya,",
-   "start": 23.12,
-   "end": 23.7,
+   "start": 24.5,
+   "end": 24.98,
    "para": 3
   },
   {
    "text": "Sistem",
-   "start": 23.7,
-   "end": 24.6,
+   "start": 25.36,
+   "end": 25.84,
    "para": 3
   },
   {
    "text": "Cerdas",
-   "start": 24.6,
-   "end": 25.08,
+   "start": 25.84,
+   "end": 26.3,
    "para": 3
   },
   {
    "text": "cukup",
-   "start": 25.08,
-   "end": 25.5,
+   "start": 26.3,
+   "end": 26.76,
    "para": 3
   },
   {
    "text": "menjalankan",
-   "start": 25.5,
-   "end": 26.1,
+   "start": 26.76,
+   "end": 27.44,
    "para": 3
   },
   {
    "text": "aturan",
-   "start": 26.1,
-   "end": 26.48,
-   "para": 3
-  },
-  {
-   "text": "itu.",
-   "start": 26.48,
-   "end": 26.82,
-   "para": 3
-  },
-  {
-   "text": "Hampir",
-   "start": 26.82,
-   "end": 27.56,
-   "para": 3
-  },
-  {
-   "text": "tidak",
-   "start": 27.56,
+   "start": 27.44,
    "end": 27.78,
    "para": 3
   },
   {
-   "text": "makan",
+   "text": "itu.",
    "start": 27.78,
-   "end": 28.26,
+   "end": 28.02,
+   "para": 3
+  },
+  {
+   "text": "Hampir",
+   "start": 28.24,
+   "end": 29.02,
+   "para": 3
+  },
+  {
+   "text": "tidak",
+   "start": 29.02,
+   "end": 29.22,
+   "para": 3
+  },
+  {
+   "text": "makan",
+   "start": 29.22,
+   "end": 29.52,
    "para": 3
   },
   {
    "text": "GPU.",
-   "start": 28.26,
-   "end": 28.74,
+   "start": 29.52,
+   "end": 29.82,
    "para": 3
   },
   {
    "text": "Mau",
-   "start": 28.74,
-   "end": 29.96,
+   "start": 30.06,
+   "end": 30.92,
    "para": 4
   },
   {
    "text": "memperkirakan",
-   "start": 29.96,
-   "end": 30.78,
+   "start": 30.92,
+   "end": 31.66,
    "para": 4
   },
   {
    "text": "penjualan",
-   "start": 30.78,
-   "end": 31.34,
+   "start": 31.66,
+   "end": 32.14,
    "para": 4
   },
   {
    "text": "bulan",
-   "start": 31.34,
-   "end": 31.58,
+   "start": 32.14,
+   "end": 32.38,
    "para": 4
   },
   {
    "text": "depan?",
-   "start": 31.58,
-   "end": 31.9,
+   "start": 32.38,
+   "end": 32.76,
    "para": 4
   },
   {
    "text": "Itu",
-   "start": 31.9,
-   "end": 32.4,
+   "start": 32.76,
+   "end": 33.48,
    "para": 4
   },
   {
    "text": "soal",
-   "start": 32.4,
-   "end": 32.8,
+   "start": 33.48,
+   "end": 33.8,
    "para": 4
   },
   {
    "text": "angka,",
-   "start": 32.8,
-   "end": 33.2,
+   "start": 33.8,
+   "end": 34.14,
    "para": 4
   },
   {
    "text": "bukan",
-   "start": 33.4,
-   "end": 33.54,
+   "start": 34.34,
+   "end": 34.52,
    "para": 4
   },
   {
    "text": "kalimat.",
-   "start": 33.54,
-   "end": 34.04,
+   "start": 34.52,
+   "end": 34.94,
    "para": 4
   },
   {
    "text": "Datanya",
-   "start": 34.04,
-   "end": 34.8,
+   "start": 34.94,
+   "end": 36.1,
    "para": 4
   },
   {
    "text": "disusun,",
-   "start": 34.8,
-   "end": 35.6,
+   "start": 36.1,
+   "end": 36.76,
    "para": 4
   },
   {
    "text": "dicek,",
-   "start": 35.94,
-   "end": 36.42,
+   "start": 37.12,
+   "end": 37.58,
    "para": 4
   },
   {
    "text": "lalu",
-   "start": 36.42,
-   "end": 37.02,
+   "start": 37.74,
+   "end": 38.16,
    "para": 4
   },
   {
    "text": "dipakai",
-   "start": 37.02,
-   "end": 37.56,
+   "start": 38.16,
+   "end": 38.64,
    "para": 4
   },
   {
    "text": "melatih",
-   "start": 37.56,
-   "end": 38.04,
+   "start": 38.64,
+   "end": 39.18,
    "para": 4
   },
   {
    "text": "AI",
-   "start": 38.04,
-   "end": 38.42,
+   "start": 39.18,
+   "end": 39.48,
    "para": 4
   },
   {
    "text": "spesialis,",
-   "start": 38.42,
-   "end": 39.24,
+   "start": 39.48,
+   "end": 40.2,
    "para": 4
   },
   {
    "text": "seperti",
-   "start": 39.24,
-   "end": 40.06,
+   "start": 40.2,
+   "end": 40.94,
    "para": 4
   },
   {
    "text": "elang",
-   "start": 40.06,
-   "end": 40.4,
+   "start": 40.94,
+   "end": 41.28,
    "para": 4
   },
   {
    "text": "yang",
-   "start": 40.4,
-   "end": 40.62,
+   "start": 41.28,
+   "end": 41.44,
    "para": 4
   },
   {
    "text": "dilatih",
-   "start": 40.62,
-   "end": 41.16,
+   "start": 41.44,
+   "end": 41.82,
    "para": 4
   },
   {
    "text": "untuk",
-   "start": 41.16,
-   "end": 41.52,
+   "start": 41.82,
+   "end": 42.0,
    "para": 4
   },
   {
    "text": "satu",
-   "start": 41.52,
-   "end": 41.92,
+   "start": 42.0,
+   "end": 42.28,
    "para": 4
   },
   {
    "text": "buruan.",
-   "start": 41.92,
-   "end": 42.46,
+   "start": 42.28,
+   "end": 42.68,
    "para": 4
   },
   {
    "text": "AI",
-   "start": 42.46,
-   "end": 43.44,
+   "start": 42.68,
+   "end": 43.56,
    "para": 5
   },
   {
    "text": "spesialis",
-   "start": 43.44,
-   "end": 44.12,
+   "start": 43.56,
+   "end": 44.32,
    "para": 5
   },
   {
    "text": "banyak",
-   "start": 44.12,
-   "end": 44.5,
+   "start": 44.32,
+   "end": 44.68,
    "para": 5
   },
   {
    "text": "macamnya.",
-   "start": 44.5,
-   "end": 45.14,
+   "start": 44.68,
+   "end": 45.32,
    "para": 5
   },
   {
    "text": "Ada",
-   "start": 45.14,
-   "end": 46.28,
+   "start": 45.32,
+   "end": 46.02,
    "para": 5
   },
   {
    "text": "yang",
-   "start": 46.28,
-   "end": 46.7,
+   "start": 46.02,
+   "end": 46.18,
    "para": 5
   },
   {
    "text": "memprediksi",
-   "start": 46.7,
-   "end": 47.34,
-   "para": 5
+   "start": 46.18,
+   "end": 46.64,
+   "para": 5,
+   "guess": true
   },
   {
    "text": "angka,",
-   "start": 47.34,
-   "end": 47.9,
+   "start": 46.64,
+   "end": 47.1,
    "para": 5
   },
   {
    "text": "seperti",
-   "start": 48.08,
-   "end": 48.74,
+   "start": 47.1,
+   "end": 47.84,
    "para": 5
   },
   {
    "text": "permintaan",
-   "start": 48.74,
-   "end": 49.62,
+   "start": 47.84,
+   "end": 48.4,
    "para": 5
   },
   {
    "text": "toko",
-   "start": 49.62,
-   "end": 50.04,
+   "start": 48.4,
+   "end": 48.68,
    "para": 5
   },
   {
    "text": "minuman",
-   "start": 50.04,
-   "end": 50.62,
+   "start": 48.68,
+   "end": 49.08,
    "para": 5
   },
   {
    "text": "dari",
-   "start": 50.62,
-   "end": 51.0,
+   "start": 49.08,
+   "end": 49.32,
    "para": 5
   },
   {
    "text": "suhu",
-   "start": 51.0,
-   "end": 51.34,
+   "start": 49.32,
+   "end": 49.56,
    "para": 5
   },
   {
    "text": "besok.",
-   "start": 51.34,
-   "end": 51.8,
+   "start": 49.56,
+   "end": 49.98,
    "para": 5
   },
   {
    "text": "Ada",
-   "start": 51.8,
-   "end": 52.2,
+   "start": 49.98,
+   "end": 50.76,
    "para": 5
   },
   {
    "text": "yang",
-   "start": 52.2,
-   "end": 52.64,
+   "start": 50.76,
+   "end": 50.9,
    "para": 5
   },
   {
    "text": "menandai",
-   "start": 52.64,
-   "end": 53.22,
+   "start": 50.9,
+   "end": 51.38,
    "para": 5
   },
   {
    "text": "transaksi",
-   "start": 53.22,
-   "end": 53.82,
+   "start": 51.38,
+   "end": 51.9,
    "para": 5
   },
   {
    "text": "janggal.",
-   "start": 53.82,
-   "end": 54.46,
+   "start": 51.9,
+   "end": 52.36,
    "para": 5
   },
   {
    "text": "Ada",
-   "start": 54.46,
-   "end": 55.06,
+   "start": 52.36,
+   "end": 53.16,
    "para": 5
   },
   {
    "text": "yang",
-   "start": 55.06,
-   "end": 55.48,
+   "start": 53.16,
+   "end": 53.32,
    "para": 5
   },
   {
    "text": "memberi",
-   "start": 55.48,
-   "end": 55.9,
+   "start": 53.32,
+   "end": 53.72,
    "para": 5
   },
   {
    "text": "skor",
-   "start": 55.9,
-   "end": 56.14,
+   "start": 53.72,
+   "end": 53.92,
    "para": 5
   },
   {
    "text": "risiko",
-   "start": 56.14,
-   "end": 56.56,
-   "para": 5
+   "start": 53.92,
+   "end": 54.24,
+   "para": 5,
+   "guess": true
   },
   {
    "text": "kredit.",
-   "start": 56.56,
-   "end": 56.82,
+   "start": 54.24,
+   "end": 54.62,
    "para": 5
   },
   {
    "text": "Ada",
-   "start": 56.82,
-   "end": 57.2,
+   "start": 54.62,
+   "end": 55.46,
    "para": 5
   },
   {
    "text": "yang",
-   "start": 57.2,
-   "end": 57.68,
+   "start": 55.46,
+   "end": 55.64,
    "para": 5
   },
   {
    "text": "melihat",
-   "start": 57.68,
-   "end": 58.02,
+   "start": 55.64,
+   "end": 56.04,
    "para": 5
   },
   {
    "text": "dan",
-   "start": 58.02,
-   "end": 58.18,
+   "start": 56.04,
+   "end": 56.2,
    "para": 5
   },
   {
    "text": "mendengar,",
-   "start": 58.18,
-   "end": 58.74,
+   "start": 56.2,
+   "end": 56.7,
    "para": 5
   },
   {
    "text": "seperti",
-   "start": 58.9,
-   "end": 59.1,
+   "start": 56.7,
+   "end": 57.52,
    "para": 5
   },
   {
    "text": "kamera",
-   "start": 59.1,
-   "end": 59.56,
+   "start": 57.52,
+   "end": 57.88,
    "para": 5
   },
   {
    "text": "yang",
-   "start": 59.56,
-   "end": 59.84,
+   "start": 57.88,
+   "end": 58.14,
    "para": 5
   },
   {
    "text": "menemukan",
-   "start": 59.84,
-   "end": 60.28,
+   "start": 58.14,
+   "end": 58.58,
    "para": 5
   },
   {
    "text": "cacat",
-   "start": 60.28,
-   "end": 60.58,
+   "start": 58.58,
+   "end": 58.9,
    "para": 5
   },
   {
    "text": "produk",
-   "start": 60.58,
-   "end": 60.94,
+   "start": 58.9,
+   "end": 59.18,
    "para": 5
   },
   {
    "text": "di",
-   "start": 60.94,
-   "end": 61.14,
+   "start": 59.18,
+   "end": 59.32,
    "para": 5
   },
   {
    "text": "pabrik.",
-   "start": 61.14,
-   "end": 61.52,
+   "start": 59.32,
+   "end": 59.64,
    "para": 5
   },
   {
    "text": "Memilah",
-   "start": 61.52,
-   "end": 62.58,
+   "start": 60.32,
+   "end": 61.14,
    "para": 6
   },
   {
    "text": "keluhan",
-   "start": 62.58,
-   "end": 63.02,
+   "start": 61.14,
+   "end": 61.5,
    "para": 6
   },
   {
    "text": "pelanggan,",
-   "start": 63.02,
-   "end": 63.54,
+   "start": 61.5,
+   "end": 62.08,
    "para": 6
   },
   {
    "text": "tanpa",
-   "start": 63.72,
-   "end": 64.28,
+   "start": 62.3,
+   "end": 63.1,
    "para": 6
   },
   {
    "text": "data",
-   "start": 64.28,
-   "end": 64.6,
+   "start": 63.1,
+   "end": 63.48,
    "para": 6
   },
   {
    "text": "untuk",
-   "start": 64.6,
-   "end": 65.0,
+   "start": 63.48,
+   "end": 63.74,
    "para": 6
   },
   {
    "text": "dilatih?",
-   "start": 65.0,
-   "end": 65.62,
+   "start": 63.74,
+   "end": 64.28,
    "para": 6
   },
   {
    "text": "Di",
-   "start": 65.62,
-   "end": 66.02,
+   "start": 64.64,
+   "end": 65.18,
    "para": 6
   },
   {
    "text": "sini",
-   "start": 66.02,
-   "end": 66.26,
+   "start": 65.18,
+   "end": 65.44,
    "para": 6
   },
   {
    "text": "perlu",
-   "start": 66.26,
-   "end": 66.62,
+   "start": 65.44,
+   "end": 65.88,
    "para": 6
   },
   {
    "text": "yang",
-   "start": 66.62,
-   "end": 66.8,
+   "start": 65.88,
+   "end": 66.08,
    "para": 6
   },
   {
    "text": "paham",
-   "start": 66.8,
-   "end": 67.14,
+   "start": 66.08,
+   "end": 66.38,
    "para": 6
   },
   {
    "text": "kalimat.",
-   "start": 67.14,
-   "end": 67.62,
+   "start": 66.38,
+   "end": 66.86,
    "para": 6
   },
   {
    "text": "Cukup",
-   "start": 67.94,
-   "end": 68.28,
+   "start": 67.2,
+   "end": 67.92,
    "para": 6
   },
   {
    "text": "burung",
-   "start": 68.28,
-   "end": 68.56,
+   "start": 67.92,
+   "end": 68.32,
    "para": 6
   },
   {
    "text": "hantu",
-   "start": 68.56,
-   "end": 68.8,
+   "start": 68.32,
+   "end": 68.6,
    "para": 6
   },
   {
    "text": "kecil:",
-   "start": 68.8,
-   "end": 69.32,
+   "start": 68.6,
+   "end": 69.0,
    "para": 6
   },
   {
    "text": "model",
-   "start": 69.78,
-   "end": 70.0,
+   "start": 69.36,
+   "end": 69.9,
    "para": 6
   },
   {
    "text": "bahasa",
-   "start": 70.0,
-   "end": 70.46,
+   "start": 69.9,
+   "end": 70.32,
    "para": 6
   },
   {
    "text": "ringan.",
-   "start": 70.46,
-   "end": 70.98,
+   "start": 70.32,
+   "end": 70.64,
    "para": 6
   },
   {
    "text": "Asisten",
-   "start": 70.98,
-   "end": 72.18,
+   "start": 71.3,
+   "end": 71.92,
    "para": 7
   },
   {
    "text": "yang",
-   "start": 72.18,
-   "end": 72.4,
+   "start": 71.92,
+   "end": 72.12,
    "para": 7
   },
   {
    "text": "menjawab",
-   "start": 72.4,
-   "end": 72.82,
+   "start": 72.12,
+   "end": 72.54,
    "para": 7
   },
   {
    "text": "apa",
-   "start": 72.82,
-   "end": 73.02,
+   "start": 72.54,
+   "end": 72.74,
    "para": 7
   },
   {
    "text": "saja,",
-   "start": 73.02,
-   "end": 73.38,
+   "start": 72.74,
+   "end": 73.14,
    "para": 7
   },
   {
    "text": "untuk",
-   "start": 73.38,
-   "end": 73.74,
+   "start": 73.14,
+   "end": 73.54,
    "para": 7
   },
   {
    "text": "semua",
-   "start": 73.74,
-   "end": 74.1,
+   "start": 73.54,
+   "end": 73.94,
    "para": 7
   },
   {
    "text": "karyawan?",
-   "start": 74.1,
-   "end": 74.7,
+   "start": 73.94,
+   "end": 74.5,
    "para": 7
   },
   {
    "text": "Baru",
-   "start": 74.7,
-   "end": 75.34,
+   "start": 75.02,
+   "end": 75.7,
    "para": 7
   },
   {
    "text": "di",
-   "start": 75.34,
-   "end": 75.52,
+   "start": 75.7,
+   "end": 76.08,
    "para": 7
   },
   {
    "text": "sini",
-   "start": 75.52,
-   "end": 75.8,
+   "start": 76.08,
+   "end": 76.36,
    "para": 7
   },
   {
    "text": "perlu",
-   "start": 75.8,
-   "end": 76.28,
+   "start": 76.36,
+   "end": 76.68,
    "para": 7
   },
   {
    "text": "paus:",
-   "start": 76.28,
-   "end": 76.78,
+   "start": 76.68,
+   "end": 77.1,
    "para": 7,
    "guess": true
   },
   {
    "text": "model",
-   "start": 76.78,
-   "end": 77.58,
+   "start": 77.76,
+   "end": 78.06,
    "para": 7
   },
   {
    "text": "bahasa",
-   "start": 77.58,
-   "end": 78.08,
+   "start": 78.06,
+   "end": 78.5,
    "para": 7
   },
   {
    "text": "besar.",
-   "start": 78.08,
-   "end": 78.54,
+   "start": 78.5,
+   "end": 78.84,
    "para": 7
   },
   {
    "text": "Ia",
-   "start": 78.54,
-   "end": 79.34,
-   "para": 7,
-   "guess": true
+   "start": 79.2,
+   "end": 79.72,
+   "para": 7
   },
   {
    "text": "makan",
-   "start": 79.34,
-   "end": 79.76,
+   "start": 79.72,
+   "end": 80.08,
    "para": 7
   },
   {
    "text": "GPU",
-   "start": 79.76,
-   "end": 80.14,
+   "start": 80.08,
+   "end": 80.4,
    "para": 7
   },
   {
    "text": "paling",
-   "start": 80.14,
-   "end": 80.56,
+   "start": 80.4,
+   "end": 80.84,
    "para": 7
   },
   {
    "text": "banyak.",
-   "start": 80.56,
-   "end": 81.02,
+   "start": 80.84,
+   "end": 81.18,
    "para": 7
   },
   {
    "text": "Empat",
-   "start": 81.02,
-   "end": 82.1,
-   "para": 8,
-   "guess": true
+   "start": 81.9,
+   "end": 82.32,
+   "para": 8
   },
   {
    "text": "kebutuhan,",
-   "start": 82.1,
-   "end": 82.78,
+   "start": 82.32,
+   "end": 82.94,
    "para": 8
   },
   {
    "text": "empat",
-   "start": 82.92,
-   "end": 83.18,
-   "para": 8,
-   "guess": true
+   "start": 83.34,
+   "end": 83.7,
+   "para": 8
   },
   {
    "text": "AI.",
-   "start": 83.18,
-   "end": 83.58,
+   "start": 83.7,
+   "end": 84.02,
    "para": 8
   },
   {
    "text": "GPU-nya",
-   "start": 83.58,
-   "end": 84.58,
-   "para": 8,
-   "guess": true
+   "start": 84.56,
+   "end": 85.2,
+   "para": 8
   },
   {
    "text": "mengikuti",
-   "start": 84.58,
-   "end": 85.18,
+   "start": 85.2,
+   "end": 85.92,
    "para": 8
   },
   {
    "text": "ukurannya.",
-   "start": 85.18,
-   "end": 85.72,
+   "start": 85.92,
+   "end": 86.42,
    "para": 8
   },
   {
    "text": "Contoh",
-   "start": 85.72,
-   "end": 87.0,
+   "start": 86.96,
+   "end": 87.76,
    "para": 9
   },
   {
    "text": "dari",
-   "start": 87.0,
-   "end": 87.22,
+   "start": 87.76,
+   "end": 88.0,
    "para": 9
   },
   {
    "text": "sebuah",
-   "start": 87.22,
-   "end": 87.6,
+   "start": 88.0,
+   "end": 88.38,
    "para": 9
   },
   {
    "text": "bank.",
-   "start": 87.6,
-   "end": 87.96,
+   "start": 88.38,
+   "end": 88.6,
    "para": 9
   },
   {
    "text": "Bu",
-   "start": 87.96,
-   "end": 88.5,
-   "para": 9,
-   "guess": true
+   "start": 88.6,
+   "end": 89.4,
+   "para": 9
   },
   {
    "text": "Rina,",
-   "start": 88.5,
-   "end": 88.8,
+   "start": 89.4,
+   "end": 89.66,
    "para": 9
   },
   {
    "text": "seorang",
-   "start": 89.06,
-   "end": 89.38,
+   "start": 90.06,
+   "end": 90.4,
    "para": 9
   },
   {
    "text": "relationship",
-   "start": 89.38,
-   "end": 89.88,
+   "start": 90.4,
+   "end": 91.02,
    "para": 9
   },
   {
    "text": "manager,",
-   "start": 89.88,
-   "end": 90.5,
+   "start": 91.02,
+   "end": 91.34,
    "para": 9
   },
   {
    "text": "memasukkan",
-   "start": 90.5,
-   "end": 91.36,
+   "start": 91.9,
+   "end": 92.44,
    "para": 9
   },
   {
    "text": "nomor",
-   "start": 91.36,
-   "end": 91.72,
+   "start": 92.44,
+   "end": 92.78,
    "para": 9
   },
   {
    "text": "CIF",
-   "start": 91.72,
-   "end": 92.26,
-   "para": 9
+   "start": 92.78,
+   "end": 93.22,
+   "para": 9,
+   "guess": true
   },
   {
    "text": "nasabahnya,",
-   "start": 92.26,
-   "end": 92.98,
+   "start": 93.22,
+   "end": 93.86,
    "para": 9
   },
   {
    "text": "Pak",
-   "start": 93.18,
-   "end": 93.26,
+   "start": 94.24,
+   "end": 94.38,
    "para": 9
   },
   {
    "text": "Budi.",
-   "start": 93.26,
-   "end": 93.68,
+   "start": 94.38,
+   "end": 94.74,
    "para": 9
   },
   {
    "text": "Muncul",
-   "start": 93.68,
-   "end": 94.5,
+   "start": 95.2,
+   "end": 95.68,
    "para": 9
   },
   {
    "text": "profilnya,",
-   "start": 94.5,
-   "end": 95.24,
+   "start": 95.68,
+   "end": 96.26,
    "para": 9
   },
   {
    "text": "mutasi",
-   "start": 95.48,
-   "end": 95.9,
+   "start": 96.64,
+   "end": 97.1,
    "para": 9
   },
   {
    "text": "rekeningnya,",
-   "start": 95.9,
-   "end": 96.58,
+   "start": 97.1,
+   "end": 97.72,
    "para": 9
   },
   {
    "text": "dan",
-   "start": 96.58,
-   "end": 97.24,
+   "start": 97.92,
+   "end": 98.36,
    "para": 9
   },
   {
    "text": "catatan",
-   "start": 97.24,
-   "end": 97.98,
+   "start": 98.36,
+   "end": 98.92,
    "para": 9
   },
   {
    "text": "dari",
-   "start": 97.98,
-   "end": 98.34,
-   "para": 9
-  },
-  {
-   "text": "AI:",
-   "start": 98.34,
-   "end": 98.74,
-   "para": 9
-  },
-  {
-   "text": "omzet",
-   "start": 98.74,
+   "start": 98.92,
    "end": 99.18,
    "para": 9
   },
   {
-   "text": "usaha",
+   "text": "AI:",
    "start": 99.18,
-   "end": 99.52,
+   "end": 99.48,
+   "para": 9
+  },
+  {
+   "text": "omzet",
+   "start": 100.08,
+   "end": 100.5,
+   "para": 9,
+   "guess": true
+  },
+  {
+   "text": "usaha",
+   "start": 100.5,
+   "end": 100.84,
    "para": 9
   },
   {
    "text": "Pak",
-   "start": 99.52,
-   "end": 99.7,
+   "start": 100.84,
+   "end": 101.04,
    "para": 9
   },
   {
    "text": "Budi",
-   "start": 99.7,
-   "end": 100.14,
+   "start": 101.04,
+   "end": 101.42,
    "para": 9
   },
   {
    "text": "naik",
-   "start": 100.14,
-   "end": 100.86,
+   "start": 101.42,
+   "end": 101.88,
    "para": 9
   },
   {
    "text": "enam",
-   "start": 100.86,
-   "end": 101.12,
+   "start": 101.88,
+   "end": 102.18,
    "para": 9,
    "guess": true
   },
   {
    "text": "bulan",
-   "start": 101.12,
-   "end": 101.4,
+   "start": 102.18,
+   "end": 102.5,
    "para": 9
   },
   {
    "text": "berturut-turut.",
-   "start": 101.4,
-   "end": 102.18,
+   "start": 102.5,
+   "end": 103.12,
    "para": 9
   },
   {
    "text": "Lalu",
-   "start": 102.73,
-   "end": 103.17,
+   "start": 103.57,
+   "end": 104.37,
    "para": 10
   },
   {
    "text": "muncul",
-   "start": 103.17,
-   "end": 103.57,
+   "start": 104.37,
+   "end": 104.85,
    "para": 10
   },
   {
    "text": "rekomendasi:",
-   "start": 103.57,
-   "end": 104.41,
+   "start": 104.85,
+   "end": 105.53,
    "para": 10
   },
   {
    "text": "Kredit",
-   "start": 104.41,
-   "end": 105.27,
+   "start": 106.13,
+   "end": 106.49,
    "para": 10
   },
   {
    "text": "Modal",
-   "start": 105.27,
-   "end": 105.59,
+   "start": 106.49,
+   "end": 106.79,
    "para": 10
   },
   {
    "text": "Kerja,",
-   "start": 105.59,
-   "end": 106.23,
+   "start": 106.79,
+   "end": 107.37,
    "para": 10
   },
   {
    "text": "dengan",
-   "start": 106.23,
-   "end": 106.83,
+   "start": 107.37,
+   "end": 107.81,
    "para": 10
   },
   {
    "text": "plafon",
-   "start": 106.83,
-   "end": 107.43,
-   "para": 10,
-   "guess": true
+   "start": 107.81,
+   "end": 108.33,
+   "para": 10
   },
   {
    "text": "yang",
-   "start": 107.43,
-   "end": 107.61,
+   "start": 108.33,
+   "end": 108.47,
    "para": 10
   },
   {
    "text": "sesuai",
-   "start": 107.61,
-   "end": 108.07,
+   "start": 108.47,
+   "end": 108.85,
    "para": 10
   },
   {
    "text": "arus",
-   "start": 108.07,
-   "end": 108.37,
+   "start": 108.85,
+   "end": 109.11,
    "para": 10
   },
   {
    "text": "kasnya.",
-   "start": 108.37,
-   "end": 108.89,
+   "start": 109.11,
+   "end": 109.49,
    "para": 10
   },
   {
    "text": "Anaknya,",
-   "start": 108.89,
-   "end": 109.75,
+   "start": 110.15,
+   "end": 110.87,
    "para": 10
   },
   {
    "text": "Dinda,",
-   "start": 109.89,
-   "end": 110.21,
+   "start": 111.21,
+   "end": 111.55,
    "para": 10
   },
   {
    "text": "juga",
-   "start": 110.49,
-   "end": 110.65,
+   "start": 111.83,
+   "end": 112.05,
    "para": 10
   },
   {
    "text": "nasabah,",
-   "start": 110.65,
-   "end": 111.39,
+   "start": 112.05,
+   "end": 112.57,
    "para": 10
   },
   {
    "text": "dan",
-   "start": 111.39,
-   "end": 111.57,
+   "start": 112.71,
+   "end": 113.11,
    "para": 10
   },
   {
    "text": "profil",
-   "start": 111.57,
-   "end": 112.01,
+   "start": 113.11,
+   "end": 113.53,
    "para": 10
   },
   {
    "text": "keduanya",
-   "start": 112.01,
-   "end": 112.49,
+   "start": 113.53,
+   "end": 113.97,
    "para": 10
   },
   {
    "text": "terhubung.",
-   "start": 112.49,
-   "end": 113.25,
+   "start": 113.97,
+   "end": 114.45,
    "para": 10
   },
   {
    "text": "Dari",
-   "start": 113.25,
-   "end": 113.75,
+   "start": 114.65,
+   "end": 115.35,
    "para": 10
   },
   {
    "text": "situ,",
-   "start": 113.75,
-   "end": 114.09,
+   "start": 115.35,
+   "end": 115.65,
    "para": 10
   },
   {
    "text": "AI",
-   "start": 114.41,
-   "end": 114.69,
+   "start": 116.13,
+   "end": 116.45,
    "para": 10
   },
   {
    "text": "merekomendasikan",
-   "start": 114.69,
-   "end": 115.57,
+   "start": 116.45,
+   "end": 117.27,
    "para": 10
   },
   {
    "text": "produk",
-   "start": 115.57,
-   "end": 116.01,
+   "start": 117.27,
+   "end": 117.69,
    "para": 10
   },
   {
    "text": "untuk",
-   "start": 116.01,
-   "end": 116.43,
+   "start": 117.69,
+   "end": 118.05,
    "para": 10
   },
   {
    "text": "keluarga,",
-   "start": 116.43,
-   "end": 117.05,
+   "start": 118.05,
+   "end": 118.57,
    "para": 10
   },
   {
    "text": "misalnya",
-   "start": 117.05,
-   "end": 117.87,
+   "start": 118.67,
+   "end": 119.59,
    "para": 10
   },
   {
    "text": "asuransi",
-   "start": 118.09,
-   "end": 118.53,
+   "start": 119.87,
+   "end": 120.25,
    "para": 10
   },
   {
    "text": "pendidikan",
-   "start": 118.53,
-   "end": 119.17,
+   "start": 120.25,
+   "end": 120.87,
    "para": 10
   },
   {
    "text": "lewat",
-   "start": 119.17,
-   "end": 119.61,
+   "start": 120.87,
+   "end": 121.41,
    "para": 10
   },
   {
    "text": "bancassurance.",
-   "start": 119.61,
-   "end": 120.143,
+   "start": 121.41,
+   "end": 122.01,
    "para": 10,
    "guess": true
   },
   {
    "text": "Bu",
-   "start": 120.143,
-   "end": 120.677,
+   "start": 122.01,
+   "end": 122.61,
    "para": 10,
    "guess": true
   },
   {
    "text": "Rina",
-   "start": 120.677,
-   "end": 121.21,
+   "start": 122.61,
+   "end": 123.21,
    "para": 10,
    "guess": true
   },
   {
    "text": "langsung",
-   "start": 121.21,
-   "end": 121.77,
+   "start": 123.21,
+   "end": 123.69,
    "para": 10
   },
   {
    "text": "siap",
-   "start": 121.77,
-   "end": 122.13,
+   "start": 123.69,
+   "end": 124.07,
    "para": 10
   },
   {
    "text": "dengan",
-   "start": 122.13,
-   "end": 122.33,
+   "start": 124.07,
+   "end": 124.29,
    "para": 10
   },
   {
    "text": "tawaran",
-   "start": 122.33,
-   "end": 122.77,
+   "start": 124.29,
+   "end": 124.81,
    "para": 10
   },
   {
    "text": "yang",
-   "start": 122.77,
-   "end": 122.93,
+   "start": 124.81,
+   "end": 125.01,
    "para": 10
   },
   {
    "text": "tepat",
-   "start": 122.93,
-   "end": 123.43,
+   "start": 125.01,
+   "end": 125.39,
    "para": 10
   },
   {
    "text": "sasaran.",
-   "start": 123.57,
-   "end": 124.57,
+   "start": 125.39,
+   "end": 125.83,
    "para": 10
   },
   {
    "text": "Di",
-   "start": 124.57,
-   "end": 125.49,
-   "para": 11,
-   "guess": true
+   "start": 126.51,
+   "end": 126.61,
+   "para": 11
   },
   {
    "text": "balik",
-   "start": 125.49,
-   "end": 125.77,
+   "start": 126.61,
+   "end": 126.89,
    "para": 11
   },
   {
    "text": "layar,",
-   "start": 125.77,
-   "end": 126.21,
+   "start": 126.89,
+   "end": 127.33,
    "para": 11
   },
   {
    "text": "kebutuhannya",
-   "start": 126.35,
-   "end": 127.03,
+   "start": 127.75,
+   "end": 128.31,
    "para": 11
   },
   {
    "text": "terbagi",
-   "start": 127.03,
-   "end": 127.79,
+   "start": 128.31,
+   "end": 128.73,
    "para": 11
   },
   {
    "text": "dua.",
-   "start": 127.79,
-   "end": 128.03,
+   "start": 128.73,
+   "end": 128.91,
    "para": 11
   },
   {
    "text": "Membaca",
-   "start": 128.03,
-   "end": 129.01,
+   "start": 129.56,
+   "end": 130.36,
    "para": 11
   },
   {
    "text": "pola",
-   "start": 129.01,
-   "end": 129.39,
+   "start": 130.36,
+   "end": 130.72,
    "para": 11
   },
   {
    "text": "transaksi",
-   "start": 129.39,
-   "end": 129.95,
+   "start": 130.72,
+   "end": 131.34,
    "para": 11
   },
   {
    "text": "dan",
-   "start": 129.95,
-   "end": 130.23,
+   "start": 131.34,
+   "end": 131.58,
    "para": 11
   },
   {
    "text": "memilih",
-   "start": 130.23,
-   "end": 130.63,
+   "start": 131.58,
+   "end": 131.96,
    "para": 11
   },
   {
    "text": "produk,",
-   "start": 130.63,
-   "end": 130.95,
+   "start": 131.96,
+   "end": 132.28,
    "para": 11
   },
   {
    "text": "itu",
-   "start": 130.95,
-   "end": 131.73,
+   "start": 132.28,
+   "end": 132.94,
    "para": 11
   },
   {
    "text": "tugas",
-   "start": 131.73,
-   "end": 132.19,
+   "start": 132.94,
+   "end": 133.32,
    "para": 11
   },
   {
    "text": "AI",
-   "start": 132.19,
-   "end": 132.45,
+   "start": 133.32,
+   "end": 133.72,
    "para": 11
   },
   {
    "text": "spesialis.",
-   "start": 132.45,
-   "end": 133.11,
+   "start": 133.72,
+   "end": 134.44,
    "para": 11
   },
   {
    "text": "Menuliskan",
-   "start": 133.11,
-   "end": 133.97,
+   "start": 135.02,
+   "end": 135.82,
    "para": 11
   },
   {
    "text": "catatan",
-   "start": 133.97,
-   "end": 134.39,
+   "start": 135.82,
+   "end": 136.24,
    "para": 11
   },
   {
    "text": "untuk",
-   "start": 134.39,
-   "end": 134.65,
+   "start": 136.24,
+   "end": 136.44,
    "para": 11
   },
   {
    "text": "Bu",
-   "start": 134.65,
-   "end": 134.88,
+   "start": 136.44,
+   "end": 136.68,
    "para": 11,
    "guess": true
   },
   {
    "text": "Rina,",
-   "start": 134.88,
-   "end": 135.11,
+   "start": 136.68,
+   "end": 136.92,
    "para": 11,
    "guess": true
   },
   {
    "text": "cukup",
-   "start": 135.47,
-   "end": 135.83,
+   "start": 136.92,
+   "end": 137.76,
    "para": 11
   },
   {
    "text": "model",
-   "start": 135.83,
-   "end": 136.21,
+   "start": 137.76,
+   "end": 138.0,
    "para": 11
   },
   {
    "text": "bahasa",
-   "start": 136.21,
-   "end": 136.65,
+   "start": 138.0,
+   "end": 138.28,
    "para": 11
   },
   {
    "text": "ringan.",
-   "start": 136.65,
-   "end": 137.15,
+   "start": 138.28,
+   "end": 138.6,
    "para": 11
   },
   {
    "text": "Paus",
-   "start": 137.45,
-   "end": 137.81,
+   "start": 139.52,
+   "end": 139.86,
    "para": 11
   },
   {
    "text": "boleh",
-   "start": 137.81,
-   "end": 138.15,
+   "start": 139.86,
+   "end": 140.1,
    "para": 11
   },
   {
    "text": "beristirahat.",
-   "start": 138.15,
-   "end": 139.19,
+   "start": 140.1,
+   "end": 140.78,
    "para": 11
   },
   {
    "text": "Dengan",
-   "start": 139.19,
-   "end": 140.13,
+   "start": 141.02,
+   "end": 141.78,
    "para": 12
   },
   {
    "text": "AI",
-   "start": 140.13,
-   "end": 140.31,
+   "start": 141.78,
+   "end": 142.06,
    "para": 12
   },
   {
    "text": "yang",
-   "start": 140.31,
-   "end": 140.57,
+   "start": 142.06,
+   "end": 142.42,
    "para": 12
   },
   {
    "text": "pas,",
-   "start": 140.57,
-   "end": 140.95,
+   "start": 142.42,
+   "end": 142.9,
    "para": 12
   },
   {
    "text": "bank",
-   "start": 141.13,
-   "end": 141.31,
+   "start": 143.3,
+   "end": 143.66,
    "para": 12
   },
   {
    "text": "ini",
-   "start": 141.31,
-   "end": 141.59,
+   "start": 143.66,
+   "end": 143.92,
    "para": 12
   },
   {
    "text": "menghemat",
-   "start": 141.59,
-   "end": 142.11,
+   "start": 143.92,
+   "end": 144.46,
    "para": 12
   },
   {
    "text": "sembilan",
-   "start": 142.11,
-   "end": 142.385,
+   "start": 144.46,
+   "end": 144.74,
    "para": 12,
    "guess": true
   },
   {
    "text": "puluh",
-   "start": 142.385,
-   "end": 142.66,
+   "start": 144.74,
+   "end": 145.02,
    "para": 12,
    "guess": true
   },
   {
    "text": "tujuh",
-   "start": 142.66,
-   "end": 142.935,
+   "start": 145.02,
+   "end": 145.3,
    "para": 12,
    "guess": true
   },
   {
    "text": "persen",
-   "start": 142.935,
-   "end": 143.21,
-   "para": 12,
-   "guess": true
+   "start": 145.3,
+   "end": 145.9,
+   "para": 12
   },
   {
    "text": "biaya",
-   "start": 143.21,
-   "end": 143.67,
+   "start": 145.9,
+   "end": 146.26,
    "para": 12
   },
   {
    "text": "hardware,",
-   "start": 143.67,
-   "end": 144.07,
+   "start": 146.26,
+   "end": 146.68,
    "para": 12
   },
   {
    "text": "termasuk",
-   "start": 144.47,
-   "end": 145.07,
+   "start": 146.68,
+   "end": 147.84,
    "para": 12
   },
   {
    "text": "untuk",
-   "start": 145.07,
-   "end": 145.31,
+   "start": 147.84,
+   "end": 148.06,
    "para": 12
   },
   {
    "text": "pusat",
-   "start": 145.31,
-   "end": 145.63,
+   "start": 148.06,
+   "end": 148.4,
    "para": 12
   },
   {
    "text": "data",
-   "start": 145.63,
-   "end": 145.87,
+   "start": 148.4,
+   "end": 148.6,
    "para": 12
   },
   {
    "text": "cadangan.",
-   "start": 145.87,
-   "end": 146.37,
+   "start": 148.6,
+   "end": 149.08,
    "para": 12
   },
   {
    "text": "Hasilnya",
-   "start": 146.37,
-   "end": 147.19,
+   "start": 149.62,
+   "end": 150.3,
    "para": 12
   },
   {
    "text": "pun",
-   "start": 147.19,
-   "end": 147.45,
+   "start": 150.3,
+   "end": 150.68,
    "para": 12
   },
   {
    "text": "lebih",
-   "start": 147.45,
-   "end": 147.79,
+   "start": 150.68,
+   "end": 151.14,
    "para": 12
   },
   {
    "text": "mudah",
-   "start": 147.79,
-   "end": 148.27,
+   "start": 151.14,
+   "end": 151.48,
    "para": 12
   },
   {
    "text": "diaudit.",
-   "start": 148.27,
-   "end": 148.83,
+   "start": 151.48,
+   "end": 151.9,
    "para": 12
   },
   {
    "text": "Lalu,",
-   "start": 148.83,
-   "end": 149.95,
+   "start": 152.97,
+   "end": 153.41,
    "para": 13
   },
   {
    "text": "kenapa",
-   "start": 150.15,
-   "end": 150.43,
+   "start": 153.59,
+   "end": 153.99,
    "para": 13
   },
   {
    "text": "tidak",
-   "start": 150.43,
-   "end": 150.71,
+   "start": 153.99,
+   "end": 154.21,
    "para": 13
   },
   {
    "text": "langganan",
-   "start": 150.71,
-   "end": 151.33,
+   "start": 154.21,
+   "end": 154.71,
    "para": 13
   },
   {
    "text": "Claude",
-   "start": 151.33,
-   "end": 151.59,
+   "start": 154.71,
+   "end": 154.99,
    "para": 13,
    "guess": true
   },
   {
    "text": "atau",
-   "start": 151.59,
-   "end": 152.17,
+   "start": 154.99,
+   "end": 155.25,
    "para": 13
   },
   {
    "text": "ChatGPT",
-   "start": 152.17,
-   "end": 153.09,
+   "start": 155.25,
+   "end": 155.87,
    "para": 13,
    "guess": true
   },
   {
    "text": "saja?",
-   "start": 153.09,
-   "end": 153.49,
+   "start": 155.87,
+   "end": 156.21,
    "para": 13
   },
   {
    "text": "Untuk",
-   "start": 153.49,
-   "end": 154.09,
-   "para": 13
-  },
-  {
-   "text": "satu",
-   "start": 154.09,
-   "end": 154.41,
-   "para": 13
-  },
-  {
-   "text": "file,",
-   "start": 154.41,
-   "end": 154.87,
-   "para": 13
-  },
-  {
-   "text": "bisa.",
-   "start": 155.25,
-   "end": 155.77,
-   "para": 13
-  },
-  {
-   "text": "Tapi",
-   "start": 156.25,
-   "end": 156.53,
-   "para": 13
-  },
-  {
-   "text": "data",
-   "start": 156.53,
-   "end": 156.85,
-   "para": 13
-  },
-  {
-   "text": "nasabah",
-   "start": 156.85,
+   "start": 156.75,
    "end": 157.43,
    "para": 13
   },
   {
-   "text": "jadi",
+   "text": "satu",
    "start": 157.43,
-   "end": 157.63,
+   "end": 157.65,
+   "para": 13
+  },
+  {
+   "text": "file,",
+   "start": 157.65,
+   "end": 158.03,
+   "para": 13
+  },
+  {
+   "text": "bisa.",
+   "start": 158.19,
+   "end": 158.47,
+   "para": 13
+  },
+  {
+   "text": "Tapi",
+   "start": 158.81,
+   "end": 159.37,
+   "para": 13
+  },
+  {
+   "text": "data",
+   "start": 159.37,
+   "end": 159.55,
+   "para": 13
+  },
+  {
+   "text": "nasabah",
+   "start": 159.55,
+   "end": 160.01,
+   "para": 13
+  },
+  {
+   "text": "jadi",
+   "start": 160.01,
+   "end": 160.19,
    "para": 13
   },
   {
    "text": "keluar",
-   "start": 157.63,
-   "end": 157.97,
+   "start": 160.19,
+   "end": 160.51,
    "para": 13
   },
   {
    "text": "ke",
-   "start": 157.97,
-   "end": 158.17,
+   "start": 160.51,
+   "end": 160.65,
    "para": 13
   },
   {
    "text": "server",
-   "start": 158.17,
-   "end": 158.55,
+   "start": 160.65,
+   "end": 160.91,
    "para": 13
   },
   {
    "text": "di",
-   "start": 158.55,
-   "end": 158.77,
+   "start": 160.91,
+   "end": 161.09,
    "para": 13
   },
   {
    "text": "luar",
-   "start": 158.77,
-   "end": 159.03,
+   "start": 161.09,
+   "end": 161.27,
    "para": 13
   },
   {
    "text": "negeri.",
-   "start": 159.03,
-   "end": 159.53,
+   "start": 161.27,
+   "end": 161.61,
    "para": 13
   },
   {
    "text": "Hamra",
-   "start": 159.53,
-   "end": 160.25,
+   "start": 162.35,
+   "end": 162.77,
    "para": 13
   },
   {
    "text": "memasang",
-   "start": 160.25,
-   "end": 160.71,
+   "start": 162.77,
+   "end": 163.27,
    "para": 13
   },
   {
    "text": "semuanya",
-   "start": 160.71,
-   "end": 161.15,
+   "start": 163.27,
+   "end": 163.85,
    "para": 13
   },
   {
    "text": "di",
-   "start": 161.15,
-   "end": 161.35,
+   "start": 163.85,
+   "end": 164.07,
    "para": 13
   },
   {
    "text": "server",
-   "start": 161.35,
-   "end": 161.69,
+   "start": 164.07,
+   "end": 164.45,
    "para": 13
   },
   {
    "text": "Anda",
-   "start": 161.69,
-   "end": 161.97,
+   "start": 164.45,
+   "end": 164.77,
    "para": 13
   },
   {
    "text": "sendiri,",
-   "start": 161.97,
-   "end": 162.41,
+   "start": 164.77,
+   "end": 165.21,
    "para": 13
   },
   {
    "text": "di",
-   "start": 162.41,
-   "end": 163.05,
+   "start": 165.51,
+   "end": 165.89,
    "para": 13
   },
   {
    "text": "Indonesia.",
-   "start": 163.05,
-   "end": 163.55,
+   "start": 165.89,
+   "end": 166.35,
    "para": 13
   },
   {
    "text": "AI",
-   "start": 164.09,
-   "end": 164.69,
+   "start": 167.09,
+   "end": 167.53,
    "para": 14
   },
   {
    "text": "yang",
-   "start": 164.69,
-   "end": 165.03,
+   "start": 167.53,
+   "end": 167.87,
    "para": 14
   },
   {
    "text": "Pas,",
-   "start": 165.03,
-   "end": 165.39,
+   "start": 167.87,
+   "end": 168.31,
    "para": 14
   },
   {
    "text": "dari",
-   "start": 165.39,
-   "end": 165.67,
+   "start": 168.31,
+   "end": 168.81,
    "para": 14
   },
   {
    "text": "Hamra.",
-   "start": 165.67,
-   "end": 166.15,
+   "start": 168.81,
+   "end": 169.25,
    "para": 14
   }
  ]
