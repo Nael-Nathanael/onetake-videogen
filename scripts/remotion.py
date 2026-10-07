@@ -4,7 +4,7 @@ Render Remotion compositions from ~/OneTake/videogen/remotion (720p60).
 
   run.sh remotion.py explainer SCENES.json OUT.mp4 --words vo.words.json --duration SEC [--beats beats.json] [--theme theme.json]
   run.sh remotion.py titlecard OUT.mov --title "..." [--subtitle "..."] [--seconds 4] [--center]
-  run.sh remotion.py illustrated OUT.mp4 [--comp Cell] [--concurrency 3] [--width 1920]
+  run.sh remotion.py illustrated OUT.mp4 [--comp Cell] [--concurrency 3] [--width 1920] [--procs 3 --frames N]
 
 SCENES.json: [{"start", "end", "layout": "title|points|big|quote", "kicker", "title", "emoji",
                "points": [{"text", "at"}]}]   (seconds on the narration timeline)
@@ -14,6 +14,7 @@ Illustrated compositions are authored at 1920x1080 and rendered scaled to 720p60
 """
 
 import argparse
+import subprocess
 import tempfile
 from pathlib import Path
 
@@ -48,6 +49,33 @@ def render(comp, out, props, extra):
     print(f"-> {out}")
 
 
+def render_split(comp, out, extra, frames, procs):
+    """Render `frames` frames as `procs` parallel processes over one bundle, then join the parts.
+    Separate processes scale where --concurrency does not: each has its own browser and encoder."""
+    out = Path(out).resolve()
+    with tempfile.TemporaryDirectory(dir=out.parent) as tmp:
+        tmp = Path(tmp)
+        run(["npx", "remotion", "bundle", "src/index.ts", f"--out-dir={tmp / 'bundle'}", "--log=error"],
+            cwd=REMOTION_DIR)
+        step = -(-frames // procs)
+        parts, jobs = [], []
+        for n, first in enumerate(range(0, frames, step)):
+            part = tmp / f"part-{n:02d}.mp4"
+            parts.append(part)
+            jobs.append(subprocess.Popen(
+                ["npx", "remotion", "render", str(tmp / "bundle"), comp, str(part),
+                 f"--frames={first}-{min(first + step, frames) - 1}", "--log=error", *extra],
+                cwd=REMOTION_DIR, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True))
+        errors = [j.communicate()[1][-3000:] for j in jobs]
+        failed = [e for j, e in zip(jobs, errors) if j.returncode != 0]
+        if failed:
+            raise RuntimeError(f"{len(failed)} of {len(jobs)} render processes failed:\n{failed[0]}")
+        listing = tmp / "parts.txt"
+        listing.write_text("".join(f"file '{p}'\n" for p in parts))
+        run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", listing, "-c", "copy", out])
+    print(f"-> {out}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -71,6 +99,8 @@ def main():
     i.add_argument("--comp", default="Cell")
     i.add_argument("--concurrency", type=int, default=3)
     i.add_argument("--width", type=int, default=TARGET_W, help="output width; 1920 renders 1080p unscaled")
+    i.add_argument("--procs", type=int, default=1, help="render as this many parallel processes (needs --frames)")
+    i.add_argument("--frames", type=int, help="the composition's length in frames, for --procs")
     a = ap.parse_args()
 
     if a.cmd == "explainer":
@@ -84,8 +114,14 @@ def main():
                  **(load_json(a.theme) if a.theme else {})}
         render("Explainer", a.out, props, ["--muted", "--codec=h264", "--crf=18"])
     elif a.cmd == "illustrated":
-        render(a.comp, a.out, {}, ["--muted", "--codec=h264", "--crf=18", f"--scale={a.width / ILLUSTRATED_W}",
-                                   f"--concurrency={a.concurrency}"])
+        extra = ["--muted", "--codec=h264", "--crf=18", f"--scale={a.width / ILLUSTRATED_W}",
+                 f"--concurrency={a.concurrency}"]
+        if a.procs > 1:
+            if not a.frames:
+                ap.error("--procs needs --frames")
+            render_split(a.comp, a.out, extra, a.frames, a.procs)
+        else:
+            render(a.comp, a.out, {}, extra)
     else:
         props = {"title": a.title, "subtitle": a.subtitle, "seconds": a.seconds, "accent": a.accent,
                  "position": "center" if a.center else "lower-third"}
