@@ -66,12 +66,12 @@ const KEYS = { x: P.desk.x - 146, y: DESK_FLOOR - 184 };
 const MUTASI = [["Apr", "+ Rp 21,5 jt"], ["Mei", "+ Rp 24,0 jt"], ["Jun", "+ Rp 26,8 jt"]];
 const BARS = [26, 36, 48, 60, 76, 92];
 const SPARK = "M 2 28 L 20 24 L 38 27 L 56 17 L 74 20 L 92 10 L 112 5";
-// The piles beat 9 leaves beside each kind, held while the camera leaves the landscape.
+// The piles and labels beat 9 (stagesC) leaves beside each kind, held while the camera leaves the landscape.
 const PILES_9 = [
-  { x: P.trail1.x - 170, count: 1, size: 60, seed: "ants" },
-  { x: P.perch.x + 330, count: 6, size: 60, seed: "eagle" },
-  { x: P.branch.x - 380, count: 21, size: 60, seed: "owl" },
-  { x: P.shore.x - 140, count: GPU_CAP, size: 46, seed: "whale" },
+  { x: P.trail1.x - 170, count: 1, size: 60, seed: "ants", label: "GPU hampir nol" },
+  { x: P.perch.x + 330, count: 6, size: 60, seed: "eagle", label: "GPU kecil" },
+  { x: P.branch.x - 380, count: 21, size: 60, seed: "owl", label: "GPU menengah" },
+  { x: P.shore.x - 140, count: GPU_CAP, size: 46, seed: "whale", label: "GPU besar" },
 ];
 
 // Bu Rina's whole performance as a function of frame, so her arm and what she holds can trail it.
@@ -573,7 +573,7 @@ const AuditSheet: React.FC<BeatProps> = ({ fr }) => {
 const Savings: React.FC<BeatProps> = ({ fr }) => {
   const spare = sp(fr, T13.spare);
   // Only the two boxes stay for beat 14: the figures and the sheet leave before it mounts.
-  const out = ramp(fr, B[13].until - 8, B[13].until, depart);
+  const out = ramp(fr, B[13].until - 10, B[13].until - 1, depart);
   return (
     <>
       {spare.v > 0.001 && <GpuCube x={SPARE_X} y={GROUND} size={SMALL_BOX.size * spare.v} squash={-Math.max(-0.2, Math.min(0.2, spare.vel * 0.03))} />}
@@ -603,7 +603,12 @@ export const nudgeD = (fr: number): [number, number] =>
 export const Beat10: React.FC<BeatProps> = ({ fr }) => (
   <>
     <Residents t={fr} />
-    {fr < B[10].start + 44 && PILES_9.map((p) => <GpuPile key={p.seed} {...p} y={GROUND} fr={fr} />)}
+    {fr < B[10].start + 44 && PILES_9.map(({ label, ...p }) => (
+      <React.Fragment key={p.seed}>
+        <GpuPile {...p} y={GROUND} fr={fr} />
+        <Label text={label} x={p.x} y={GROUND + 84} size={46} color={C.gold} />
+      </React.Fragment>
+    ))}
     <Bank fr={fr} />
   </>
 );
