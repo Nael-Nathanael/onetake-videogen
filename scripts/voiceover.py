@@ -48,6 +48,7 @@ def main():
     ap.add_argument("--steps", type=int, default=10)
     a = ap.parse_args()
 
+    import torch
     from voxcpm import VoxCPM
     model = VoxCPM.from_pretrained("openbmb/VoxCPM2", load_denoiser=False)
     out = Path(a.out)
@@ -55,7 +56,8 @@ def main():
     parts_dir.mkdir(parents=True, exist_ok=True)
 
     def gen(text, **kw):
-        wav = model.generate(text=text, cfg_value=a.cfg, inference_timesteps=a.steps, seed=a.seed, **kw)
+        torch.manual_seed(a.seed)
+        wav = model.generate(text=text, cfg_value=a.cfg, inference_timesteps=a.steps, **kw)
         return np.asarray(wav, dtype=np.float32).reshape(-1)
 
     if a.ref:
