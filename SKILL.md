@@ -40,6 +40,23 @@ ASS captions follow the same rules. In short:
 
 Check motion in frame strips, not single stills.
 
+## Keep it exciting, keep it short (all modes)
+
+Viewers decide in the first seconds and leave at the first dull stretch. Every video:
+
+- **Hook in the first 3 s.** Open on the payoff, a surprising claim or a question; never a greeting,
+  logo or slow intro. A title card, if any, is short and lands on a sound effect.
+- **Something changes every 2–4 s:** a new scene, a point popping in, a caption highlight, a sound
+  effect. No static stretch over 4 s.
+- **No dead air.** Cut silences, warm-ups and repeats; one idea said once.
+- **Short.** Cut to the shortest version that still delivers the point. When in doubt, shorter.
+- **Energy carries through.** Upbeat music, sound effects on every visual event, captions on: defaults
+  for B and C; for an edit (A), recommend them as extras in the plan.
+- **End on the payoff,** then stop: no long outro.
+
+Excitement comes from pace and change, not from jittery motion: the motion rules still hold, so each
+change stays easy to read.
+
 ## Understand the request, confirm once, then run
 
 Work from what the user wants the viewer to get, not from keywords in the request.
@@ -66,16 +83,16 @@ Work from what the user wants the viewer to get, not from keywords in the reques
    text. When both fit, recommend one and offer the other in the confirmation.
 
    Then fill in the rest, each with a default you can justify from the request:
-   - **Length:** from the footage, the script (~140 words per minute) or the request; otherwise 1–2 min
-     for B, 20–60 s for C.
+   - **Length:** from the footage, the script (~140 words per minute) or the request; otherwise 45–90 s
+     for B, 20–45 s for C.
    - **Language** of narration and captions: the request's language unless stated.
-   - **Tone:** calm and documentary or upbeat and punchy. It sets the motion feel, the music `--query` and
+   - **Tone:** upbeat and punchy by default; calm and documentary only when asked. It sets the motion feel, the music `--query` and
      how many sound effects.
    - **Captions** on or off, **voice** (generated, cloned from a sample, or none), **music** mood,
      **sound effects** (none, light, or one per event). For an edit (A), add only what the request asks
      for; list the rest as optional extras, off by default. Generated videos (B, C) default to music and
      sound effects on.
-   - For A: how hard to cut (keep personality, or tight and fast).
+   - For A: how hard to cut. Default tight and fast (`--max-gap 0.4`); keep more only when asked.
 3. **Confirm in one step.** Show the whole plan as one short list, in the request's language, so the user
    can correct anything. Then ask with `AskUserQuestion` when available (without it, one short message):
    - Ask only about choices that are still open and would materially change the video: at most 4 questions, 2–4
@@ -129,14 +146,14 @@ Work from what the user wants the viewer to get, not from keywords in the reques
 ## B. Explainer from a topic or script
 
 1. **Script** — if given only a topic, write the narration as natural speech in the confirmed narration language (short sentences,
-   conversational, hook in the first line, ~140 words per minute of target length). Save as `$J/script.txt`,
+   conversational, the hook in the first line, no greeting or outro, ~140 words per minute of target length). Save as `$J/script.txt`,
    paragraphs = scenes. `[pause 1.0]` on its own paragraph adds silence.
 2. **Voice-over**: `$S/run.sh voiceover.py $J/script.txt $J/vo.wav` (consistent voice from `--voice "(description)"`;
    or clone with `--ref sample.wav --ref-text "transcript"`). First run downloads the model (~several GB).
 3. **Word timings**: `$S/run.sh transcribe.py $J/vo.wav $J/vo --lang id` → `$J/vo/words.json` (`--lang` = the
    narration language, e.g. `en`).
-4. **Scenes**: write `$J/scenes.json` from the transcript timings — one scene per idea, 4–10 s each, so the
-   screen changes often (keeps it from feeling monotonous):
+4. **Scenes**: write `$J/scenes.json` from the transcript timings — one scene per idea, 3–6 s each, with a point,
+   highlight or sound effect every 2–4 s inside longer scenes:
    ```json
    [{"start": 0, "end": 4.2, "layout": "title", "kicker": "Tips", "title": "Edit 10x Lebih Cepat", "emoji": "⚡"},
     {"start": 4.2, "end": 11.8, "layout": "points", "title": "3 langkah",

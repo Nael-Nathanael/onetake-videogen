@@ -2,7 +2,8 @@
 
 These rules apply to every animated element in every mode: explainer scenes, title cards, captions,
 illustrated scenes, and anything added later. The goal is motion that people find easy to watch:
-alive, but calm. The code lives in `remotion/src/motion.ts`. The burned-in captions follow the same
+energetic, but readable. Pace comes from frequent changes (SKILL.md, "Keep it exciting"); each
+single motion stays clean. The code lives in `remotion/src/motion.ts`. The burned-in captions follow the same
 rules in ASS (`scripts/captions.py`).
 
 ## Rules
