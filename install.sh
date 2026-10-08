@@ -37,14 +37,12 @@ for f in subtitles rubberband sidechaincompress; do
 done
 ffmpeg -hide_banner -encoders 2>/dev/null | grep -q h264_nvenc || echo "warning: no h264_nvenc, renders fall back to libx264 (slower)"
 
-# Large pip/npm temp files go to disk, not a tmpfs /tmp.
-mkdir -p "$ONETAKE/storage/tmp" 2>/dev/null || true
-
 say "OneTake at $ONETAKE"
 if [[ ! -d "$ONETAKE/.git" ]]; then
   git clone "$ONETAKE_URL" "$ONETAKE"
-  mkdir -p "$ONETAKE/storage/tmp"
 fi
+# Large pip/npm temp files go to disk, not a tmpfs /tmp.
+mkdir -p "$ONETAKE/storage/tmp"
 export TMPDIR="$ONETAKE/storage/tmp"
 cd "$ONETAKE"
 if git apply --reverse --check "$REPO/patches/onetake-gpu-longvideo.patch" 2>/dev/null; then
