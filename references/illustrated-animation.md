@@ -9,8 +9,9 @@ verification and safe rendering are in `motion.md`; this file adds what is speci
 
 1. **Beat sheet.** For each beat, write down the one focal mover, its anticipation, its payoff, the
    secondary reactions, and its length in frames. If there is narration, add the word the beat lands on.
-2. **Art.** Generate a sprite sheet with Gemini (the `generate-image-producer` skill when installed).
-   This prompt shape works:
+2. **Art.** Generate a sprite sheet with `scripts/image.py "PROMPT" $J/sheet.jpg`. It runs Gemini's
+   image model through agy (the Antigravity CLI) on the signed-in account, with no API key. `--ref IMG`
+   (up to 3) edits a sheet or keeps a second sheet in the style of the first. This prompt shape works:
    - "flat vector illustration assets in the style of Kurzgesagt"
    - a single solid background colour given as a hex value
    - assets laid out on a loose grid with empty space between them
@@ -18,8 +19,9 @@ verification and safe rendering are in `motion.md`; this file adds what is speci
    - "crisp edges suitable for vector tracing", landscape 16:9
 
    One roll gave a clean cell body, nucleus, mitochondria, vesicles and chromosomes. One chromosome
-   came out broken; drop pieces like that. Gemini's download step can take more than a minute, so use
-   a timeout of at least 120 s.
+   came out broken; drop pieces like that. A 16:9 sheet is a 1376×768 JPEG and takes about a minute.
+   The background drifts from the hex asked for (`#14213d` came back as `#132344`), so leave
+   `split.py` on `--bg auto` and use the colour it prints as the video background.
 3. **Split and trace.** `scripts/split.py` does all of this; its flags cover the background colour,
    threshold, downsample factor, minimum area and vtracer options.
    - Mask each pixel by its distance from the background colour, using a soft alpha ramp so the

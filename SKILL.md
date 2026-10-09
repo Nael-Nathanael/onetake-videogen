@@ -179,8 +179,10 @@ design in `examples/cell/`): copy its structure for a new scene.
 1. **Beat sheet**: one focal mover per beat, with its anticipation and payoff. When the scene explains
    something, write and voice the narration first (B steps 1–3) and time each beat to the word that names
    it.
-2. **Art**: a flat-vector sprite sheet from Gemini on a solid background, then
-   `$S/run.sh split.py SHEET.png $J/parts` (flags: `--bg auto|#rrggbb`, `--threshold 40`, `--downsample 4`,
+2. **Art**: a flat-vector sprite sheet on a solid background from
+   `$S/run.sh image.py "PROMPT" $J/sheet.jpg [--aspect 16:9] [--ref IMG ...]` (Gemini's image model through
+   agy, no API key; `--ref` edits or restyles from up to 3 images), then
+   `$S/run.sh split.py $J/sheet.jpg $J/parts` (flags: `--bg auto|#rrggbb`, `--threshold 40`, `--downsample 4`,
    `--min-area 200`, `--vtracer "<opts>"`). It writes `aNN.svg` per part, a labelled check sheet and
    `assets.json`. Drop broken pieces; copy the kept SVGs to `remotion/public/illustrated/<scene>/`.
 3. **Build** in `remotion/src/illustrated/<scene>/`, authored at 1920×1080 and registered in `Root.tsx`.
@@ -266,6 +268,8 @@ add cuecheck's worst offset, the loudness and whether the loudness pass stayed l
   Remotion is free for individuals and companies ≤3 people; larger companies need a Remotion company licence.
 - **`No module named 'PIL'`, missing `@remotion/motion-blur`, or `vtracer: command not found`**: the install
   predates illustrated mode; rerun `install.sh`. vtracer needs Rust (`cargo install vtracer`).
+- **`image.py`: `agy made no image`**: agy is signed out (run `agy` once and log in) or the account's image
+  quota is used up; the message after the colon is agy's own reply.
 - **`cuecheck.py` FAIL**: a cue's source file changed or `at` points past the video; rerun `mix.py --sfx` and
   check `OUT.sfx.json` for the placed times.
 - Fresh machine or broken env: rerun `install.sh` (idempotent).

@@ -35,7 +35,7 @@ Output: 1280×720 at 60 fps, H.264/AAC MP4.
 - Python 3.10–3.12.
 - Node.js 20+.
 - Google Chrome. This is optional: Remotion downloads its own headless shell if Chrome isn't installed.
-- For illustrated animation: [vtracer](https://github.com/visioncortex/vtracer) (`cargo install vtracer`; `install.sh` does this when Rust is present) and [Bun](https://bun.sh) for the headless simulation check.
+- For illustrated animation: [vtracer](https://github.com/visioncortex/vtracer) (`cargo install vtracer`; `install.sh` does this when Rust is present) and [Bun](https://bun.sh) for the headless simulation check. `scripts/image.py` generates the art through `agy` (the Antigravity CLI), signed in to a Google account; no API key is needed.
 
 ## Install
 
