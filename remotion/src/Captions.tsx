@@ -3,10 +3,23 @@ import { interpolateColors, useCurrentFrame, useVideoConfig } from "remotion";
 import { POP, rig, SOFT } from "./motion";
 import { fontFamily, INK, PAPER, Word } from "./theme";
 
-const MAX_WORDS = 6;
+const FONT_SIZE = 44;
+const PAD_Y = 10;
+
+/**
+ * Where captions sit in a frame. Landscape: one line near the bottom edge. Vertical: shorter lines
+ * that may wrap to two, raised clear of the controls a phone app draws over the bottom of the video.
+ * `reserve` is the height from the bottom edge that scene content keeps free.
+ */
+export const captionLayout = (width: number, height: number) => {
+  const vertical = height > width;
+  const bottom = vertical ? Math.round(height * 0.19) : 56;
+  const bandHeight = (vertical ? 2 : 1) * FONT_SIZE * 1.25 + 2 * PAD_Y;
+  return { maxWords: vertical ? 4 : 6, maxWidth: Math.min(1100, width - 112), bottom, bandHeight, reserve: bottom + bandHeight + 19 };
+};
 
 /** Group words into short caption lines, breaking on punctuation, pauses and length. */
-export const toLines = (words: Word[]) => {
+export const toLines = (words: Word[], maxWords = 6) => {
   const lines: Word[][] = [];
   let cur: Word[] = [];
   words.forEach((w, i) => {
@@ -14,7 +27,7 @@ export const toLines = (words: Word[]) => {
     const next = words[i + 1];
     const punct = /[.,!?;:]$/.test(w.text);
     const pause = next ? next.start - w.end > 0.35 : true;
-    if (cur.length >= MAX_WORDS || punct || pause) {
+    if (cur.length >= maxWords || punct || pause) {
       lines.push(cur);
       cur = [];
     }
@@ -30,19 +43,25 @@ export const Captions: React.FC<{ words: Word[]; accent: string; ink?: string; p
   paper = PAPER,
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
   const t = frame / fps;
-  const lines = useMemo(() => toLines(words), [words]);
+  const { maxWords, maxWidth, bottom, bandHeight } = captionLayout(width, height);
+  const lines = useMemo(() => toLines(words, maxWords), [words, maxWords]);
   const line = lines.find((l) => t >= l[0].start - 0.05 && t <= l[l.length - 1].end + 0.25);
-  if (!line) return null;
+  // The band captions fill, marked even between lines so the check gate can tell what runs into it.
+  const band = <div data-caption-band style={{ position: "absolute", bottom, width: "100%", height: bandHeight }} />;
+  if (!line) return band;
 
   const lineIn = rig(frame - Math.round(line[0].start * fps), fps, SOFT).v;
 
   return (
+    <>
+    {band}
     <div
+      data-captions
       style={{
         position: "absolute",
-        bottom: 56,
+        bottom,
         width: "100%",
         display: "flex",
         justifyContent: "center",
@@ -54,12 +73,12 @@ export const Captions: React.FC<{ words: Word[]; accent: string; ink?: string; p
         style={{
           fontFamily,
           fontWeight: 800,
-          fontSize: 44,
+          fontSize: FONT_SIZE,
           background: ink,
           color: paper,
-          padding: "10px 22px",
+          padding: `${PAD_Y}px 22px`,
           borderRadius: 18,
-          maxWidth: 1100,
+          maxWidth,
           textAlign: "center",
           lineHeight: 1.25,
         }}
@@ -86,5 +105,6 @@ export const Captions: React.FC<{ words: Word[]; accent: string; ink?: string; p
         })}
       </div>
     </div>
+    </>
   );
 };

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Cut a recording from its transcript: drop deleted words, fillers and long pauses,
-optionally burn pop captions, and scale to 720p. One frame-accurate NVENC pass.
+optionally burn pop captions, and scale to 720p (the short side, so portrait stays portrait).
+One frame-accurate NVENC pass.
 
   run.sh cut.py VIDEO WORDS_JSON OUT.mp4 [--cuts cuts.json] [--max-gap 0.6] [--pad 0.12]
                 [--keep-fillers] [--captions] [--height 720] [--quality high]
@@ -58,7 +59,7 @@ def main():
     ap.add_argument("--pad", type=float, default=0.12, help="seconds kept around each word")
     ap.add_argument("--keep-fillers", action="store_true")
     ap.add_argument("--captions", action="store_true")
-    ap.add_argument("--height", type=int, default=TARGET_H, help="downscale if taller (0 = keep)")
+    ap.add_argument("--height", type=int, default=TARGET_H, help="downscale when the short side is larger (0 = keep)")
     ap.add_argument("--quality", default="high", choices=["high", "medium", "low"])
     a = ap.parse_args()
 
@@ -76,12 +77,15 @@ def main():
     out.parent.mkdir(parents=True, exist_ok=True)
 
     filters = []
-    if a.height and info.get("height", 0) > a.height:
-        filters.append(f"scale=-2:{a.height}:flags=lanczos")
+    # --height is the short side: portrait footage keeps its shape (1080x1920 -> 720x1280).
+    width, height = info.get("width", 0), info.get("height", 0)
+    if a.height and min(width, height) > a.height:
+        k = a.height / min(width, height)
+        width, height = (round(width * k / 2) * 2, a.height) if width >= height else (a.height, round(height * k / 2) * 2)
+        filters.append(f"scale={width}:{height}:flags=lanczos")
     if a.captions:
         ass = out.with_suffix(".ass")
-        write_ass(out_words, ass, height=a.height or info.get("height", TARGET_H),
-                  width=round((a.height or info["height"]) * info["width"] / info["height"]))
+        write_ass(out_words, ass, width=width, height=height)
         filters.append(ass_filter(ass, FONTS_DIR))
 
     t0 = time.time()

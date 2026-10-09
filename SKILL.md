@@ -1,6 +1,7 @@
 ---
 name: onetake-videogen
-description: Local video production on an NVIDIA GPU, built on OneTake. Edits raw talking-head and screen recordings (Whisper transcript → removes fillers, retakes and long pauses → frame-accurate NVENC cut), burns word-by-word captions, adds tempo-matched royalty-free music, sound effects on every beat, voice-over (VoxCPM2, Indonesian and 29 more languages), animated explainers from a topic or script, and Kurzgesagt-style illustrated animation (AI-generated flat-vector art, soft-body physics in Remotion). Use it whenever the user's goal involves making, editing or improving a video, in any language or wording, with or without a file: cutting mistakes, adding captions, music, sound effects, a voice-over or an intro, or turning a topic into an animation. It works out the right workflow from the request and confirms a short plan with the user before rendering. Output 720p60 MP4, -14 LUFS.
+description: >-
+  Local video production on an NVIDIA GPU, built on OneTake. Edits raw talking-head and screen recordings (Whisper transcript → removes fillers, retakes and long pauses → frame-accurate NVENC cut), burns word-by-word captions, adds tempo-matched royalty-free music, sound effects on every beat, voice-over (VoxCPM2, Indonesian and 29 more languages), animated explainers from a topic or script, and Kurzgesagt-style illustrated animation (AI-generated flat-vector art, soft-body physics in Remotion). Use it whenever the user's goal involves making, editing or improving a video, in any language or wording, with or without a file: cutting mistakes, adding captions, music, sound effects, a voice-over or an intro, or turning a topic into an animation. It works out the right workflow from the request and confirms a short plan with the user before rendering. Output 720p60 MP4, landscape or vertical (TikTok, Reels, Shorts), -14 LUFS, with the caption, hashtags and thumbnail to post it.
 ---
 
 # OneTake videogen
@@ -21,9 +22,12 @@ skill directory (see README.md).
 **Confirm once, then run automatically** (see "Understand the request" below): one short plan
 confirmation before any heavy work, then every editorial decision is yours until the video is done.
 
-Production format is **1280×720**. Sources above 720p are downscaled; an edited recording keeps its own
-frame rate (30 fps stays 30 fps), and generated video (explainers, title cards, illustrated scenes)
-renders at 60 fps.
+Production format is **720p**: 1280×720 landscape, or 720×1280 vertical for TikTok, Reels and Shorts.
+Sources above 720p are downscaled on their short side, so portrait footage stays portrait. An edited
+recording keeps its own frame rate (30 fps stays 30 fps); generated video (explainers, title cards,
+illustrated scenes) renders at 60 fps. Explainers and title cards take `--format vertical`: type, margins
+and captions follow the frame, with captions raised clear of the app's controls. Illustrated scenes
+(C) are landscape.
 
 ## Motion (all modes)
 
@@ -57,6 +61,24 @@ Viewers decide in the first seconds and leave at the first dull stretch. Every v
 Excitement comes from pace and change, not from jittery motion: the motion rules still hold, so each
 change stays easy to read.
 
+## Facts, sources and likenesses (all modes)
+
+A video that states something false, or shows something fake as real, harms the person publishing it.
+
+- **Never invent** a fact, number, price, date, quote, feature or testimonial. Each one comes from the
+  user, a file they gave, or a source you read. Cut a claim with no source, or ask about it in the
+  plan confirmation.
+- **Research a factual topic before writing the script**: primary and reputable sources, the date of
+  the information for anything recent, disputed points marked as disputed. Every source goes in
+  `post.json` `sources`, and a number on screen matches its source to the digit.
+- **An edit keeps the speaker's meaning.** No cut joins words into a statement they did not make.
+- **Nothing fake shown as real**: no real person's likeness in generated art, no cloned voice except from a
+  sample the user gave of a voice they may use, no generated brand logo (use the file the user gave),
+  no generated document, screenshot or app screen shown as the real one. Real people and events are
+  drawn as plain illustration or symbols.
+- **Say what is generated.** List voice, illustrations and music made by a model in `post.json`
+  `generated` and in the report.
+
 ## Understand the request, confirm once, then run
 
 Work from what the user wants the viewer to get, not from keywords in the request.
@@ -85,6 +107,8 @@ Work from what the user wants the viewer to get, not from keywords in the reques
    Then fill in the rest, each with a default you can justify from the request:
    - **Length:** from the footage, the script (~140 words per minute) or the request; otherwise 45–90 s
      for B, 20–45 s for C.
+   - **Format:** vertical when the request names TikTok, Reels, Shorts or a phone, or the footage is
+     portrait; landscape otherwise.
    - **Language** of narration and captions: the request's language unless stated.
    - **Tone:** upbeat and punchy by default; calm and documentary only when asked. It sets the motion feel, the music `--query` and
      how many sound effects.
@@ -111,98 +135,19 @@ Work from what the user wants the viewer to get, not from keywords in the reques
    scene timing, cue placement) and don't ask again mid-pipeline. Ask again only if an input turns out
    missing or unusable (no file, corrupt file, no speech where speech was expected).
 
-## A. Edit a recording
+## The steps for each mode
 
-1. **Transcribe** (GPU, ~1 min per 18 min of audio):
-   `$S/run.sh transcribe.py INPUT.mp4 $J --lang id` → `$J/words.json`, `$J/transcript.txt`
-   Use `--lang en` / `--lang auto` when the speaker isn't speaking Indonesian.
+After the plan is confirmed, read the file for the mode and follow its steps in order. The steps live
+only there.
 
-2. **Decide the cuts** by reading `$J/transcript.txt`. Lines look like
-   `#120-134 [00:04:12.0] text…`; `[eh,]` marks fillers (removed automatically);
-   `(... 3.2s ...)` marks a pause (pauses > `--max-gap` are shortened automatically).
-   Write `$J/cuts.json` = `{"delete": [[first, last], ...], "why": {"120-134": "retake"}}` deleting:
-   - **Retakes / false starts** — when a sentence is said again, keep the *last* complete take
-     (speakers redo until it's right). Typical cue: same opening words repeated, "eh maksud saya",
-     "ulang ya", "sorry".
-   - **Self-corrections** — delete the wrong part and the correction phrase, keep the corrected statement.
-   - **Off-camera / meta talk** — "udah rekam belum?", "bentar", talking to someone else, mic checks.
-   - **Whisper hallucinations** — text in the last seconds or in long silences that doesn't fit,
-     classically "Terima kasih sudah menonton", "selamat menikmati", "subscribe". Low `prob` in words.json backs this up.
-   - Keep content even if imperfectly phrased; don't over-trim personality. When unsure, keep.
+| Mode | Read |
+|---|---|
+| **A. Edit a recording** | `references/edit.md` |
+| **B. Explainer from a topic or script** | `references/explainer.md` |
+| **C. Illustrated animation** | `references/motion.md`, then `references/illustrated-animation.md` |
 
-3. **Cut + captions** (one NVENC pass, frame-accurate):
-   `$S/run.sh cut.py INPUT.mp4 $J/words.json $J/cut.mp4 --cuts $J/cuts.json --captions`
-   Writes `cut.words.json` (words re-timed to the edit — use it for music tempo and title timing).
-   Options: `--max-gap 0.6` (tighter = punchier; 0.4 for fast-paced, 0.9 for calm tutorials), `--pad 0.12`,
-   `--keep-fillers`, `--quality medium`, no `--captions` if the user doesn't want them.
-
-4. **Music** (see below): `$S/run.sh music.py $J/music --duration <cut duration> --words $J/cut.words.json`
-
-5. **Title card** (optional, nice for the opening topic):
-   `$S/run.sh remotion.py titlecard $J/title.mov --title "Judul" --subtitle "Subjudul" --seconds 4`
-
-6. **Mix**: `$S/run.sh mix.py $J/cut.mp4 $J/final.mp4 --music $J/music/bed.wav --overlay $J/title.mov@0.5`
-
-## B. Explainer from a topic or script
-
-1. **Script** — if given only a topic, write the narration as natural speech in the confirmed narration language (short sentences,
-   conversational, the hook in the first line, no greeting or outro, ~140 words per minute of target length). Save as `$J/script.txt`,
-   paragraphs = scenes. `[pause 1.0]` on its own paragraph adds silence.
-2. **Voice-over**: `$S/run.sh voiceover.py $J/script.txt $J/vo.wav` (consistent voice from `--voice "(description)"`;
-   or clone with `--ref sample.wav --ref-text "transcript"`). First run downloads the model (~several GB).
-3. **Word timings**: `$S/run.sh transcribe.py $J/vo.wav $J/vo --lang id` → `$J/vo/words.json` (`--lang` = the
-   narration language, e.g. `en`).
-4. **Scenes**: write `$J/scenes.json` from the transcript timings — one scene per idea, 3–6 s each, with a point,
-   highlight or sound effect every 2–4 s inside longer scenes:
-   ```json
-   [{"start": 0, "end": 4.2, "layout": "title", "kicker": "Tips", "title": "Edit 10x Lebih Cepat", "emoji": "⚡"},
-    {"start": 4.2, "end": 11.8, "layout": "points", "title": "3 langkah",
-     "points": [{"text": "Unggah video", "at": 5.1}, {"text": "Hapus teks", "at": 7.0}]}]
-   ```
-   Layouts: `title` (hook/section), `points` (lists; set each `at` to when the narrator says it), `big` (one stat or
-   keyword), `quote`. Titles ≤ 6 words, points ≤ 5 words — the narration carries the detail.
-5. **Music**: `$S/run.sh music.py $J/music --duration <vo duration> --words $J/vo/words.json`
-6. **Render**: `$S/run.sh remotion.py explainer $J/scenes.json $J/visual.mp4 --words $J/vo/words.json --duration <vo duration> --beats $J/music/beats.json`
-   Scene changes snap to the nearest beat; accents pulse on the beat.
-   For a brand's look add `--theme $J/theme.json` = `{"palette": [...], "ink": "#…", "paper": "#…", "accent": "#…"}`.
-   `paper` is the scene text, `ink` the frame and card text; for dark text on pale scenes pass the dark tone as
-   `paper` and give `accent` a text-safe shade, since bright brand colours rarely read on a pale caption box.
-7. **Mix**: `$S/run.sh mix.py $J/visual.mp4 $J/final.mp4 --voice $J/vo.wav --music $J/music/bed.wav`
-
-## C. Illustrated animation
-
-Read `references/motion.md`, then `references/illustrated-animation.md`, before starting. The second
-holds the pipeline, the reasons behind each choice, the soft-body recipe and the extra checks for
-illustration. The worked example is the `Cell` composition (`remotion/src/illustrated/cell/`, sound
-design in `examples/cell/`): copy its structure for a new scene.
-
-1. **Beat sheet**: one focal mover per beat, with its anticipation and payoff. When the scene explains
-   something, write and voice the narration first (B steps 1–3) and time each beat to the word that names
-   it.
-2. **Art**: a flat-vector sprite sheet from Gemini on a solid background, then
-   `$S/run.sh split.py SHEET.png $J/parts` (flags: `--bg auto|#rrggbb`, `--threshold 40`, `--downsample 4`,
-   `--min-area 200`, `--vtracer "<opts>"`). It writes `aNN.svg` per part, a labelled check sheet and
-   `assets.json`. Drop broken pieces; copy the kept SVGs to `remotion/public/illustrated/<scene>/`.
-3. **Build** in `remotion/src/illustrated/<scene>/`, authored at 1920×1080 and registered in `Root.tsx`.
-   Draw in code anything that deforms or splits. Soft things come from a precomputed, deterministic
-   position-based-dynamics simulation, not from sine wobble. Shared helpers: `illustrated/shared.ts`
-   (`sampleAt` fractional-frame blending, `trailingShift` for motion blur) and `motion.ts`
-   (`squashAlong`).
-4. **Anticipation, a 4-frame hit-pause and overshoot** on every big event. Depth layers, lighting and
-   juice on the payoff.
-5. **Check headless**: `bun scripts/simcheck.ts` (NaNs, event frames) before any render.
-6. **Render**: `$S/run.sh remotion.py illustrated $J/visual-v1.mp4 [--comp Cell] [--concurrency 3]`, muted
-   1280×720 at 60 fps (rendered from 1920×1080 with `--scale`). Wrap it in
-   `systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 --quiet bash -c '...'` (4G for stills
-   and strips), one heavy job at a time. `--concurrency 8` is the fastest on a 20-core laptop: a 600-frame
-   1080p benchmark took 61 s at 8, 63 s at 12 and 67 s at 16, because the workers queue on Chrome's
-   compositor and the encoder, not the CPU. Check with `npx remotion benchmark --concurrencies=4,8,12`.
-   `--width 1920` renders 1080p unscaled. Each round writes new versioned paths (`visual-v2.mp4`,
-   `strips-v2/`); never overwrite or delete earlier rounds in the same command.
-7. **Frame strips**: `$S/run.sh frames.py $J/visual.mp4 $J/strips 240 780:820:2` writes the frames and a
-   contact sheet. Read every event's wind-up, hold, release and settle.
-8. **Sound**: music with a `--query` matching the confirmed tone, plus sound effects on every event (see
-   Sound effects). Mix as in B (`--voice $J/vo.wav` when narrated), adding `--sfx`.
+Footage plus an intro: A's file, then B's or C's for the intro. The sections below
+(music, sound effects, post package, report) apply to every mode.
 
 ## Music: tempo-matched, royalty-free
 
@@ -246,11 +191,39 @@ scene change, a cue per event in an illustrated scene. Pass absolute paths (`run
 
 Give the user `$J/audio/CREDITS.txt` with the music credits.
 
+## Post package (any mode)
+
+A finished video ships with what gets pasted when it is published. Write `$J/post.json` in the video's
+language:
+
+```json
+{"title": "What gives AI fiction away?", "hook": "A novel pulled for AI",
+ "caption": "…", "hashtags": ["ai", "writing", "fiction"],
+ "sources": ["https://…"], "generated": ["voice (VoxCPM2)"],
+ "chapters": [{"at": "0:00", "title": "The pulled novel"}]}
+```
+
+- `title`: up to 100 characters. `hook`: the opening title exactly as it reads on screen.
+- `caption`: up to 2200 characters. The hook line, 2–4 short lines of what the viewer gets, and a call
+  to action when the video has one.
+- `hashtags`: 3–8, no `#`, no spaces.
+- `sources`: every URL or document a claim rests on; `[]` when the video makes none.
+- `generated`: what is AI-made (voice, illustrations, music); `[]` for an edit of real footage.
+- `chapters`: only for a video with at least 3 parts that start 10 s or more apart, the first at 0:00.
+  Long edited recordings need them most.
+
+Then `$S/run.sh post.py $J/post.json --video $J/final.mp4 [--scenes $J/scenes.json]`. It prints one line
+per problem; fix the file until it prints none. It writes `$J/post.txt` (paste-ready: title, caption,
+hashtags, chapters, sources, the music and sound credits, the AI disclosure) and `$J/cover.jpg` for the
+thumbnail. With `--scenes` the cover is the first scene once its title has landed; otherwise pass
+`--cover-at <seconds>` for the frame that shows the hook.
+
 ## Report back
 
-When done, tell the user: final path, any place where you departed from the confirmed plan and why,
+When done, tell the user: final path, `post.txt` and `cover.jpg`, any place where you departed from the confirmed plan and why,
 duration before → after, a short list of what was cut (counts + the
-notable retakes), the music track(s) with tempo and the credits text, and render times. With sound effects,
+notable retakes), the music track(s) with tempo and the credits text, the sources behind the claims, what
+is AI-generated, anything you could not verify, and render times. With sound effects,
 add cuecheck's worst offset, the loudness and whether the loudness pass stayed linear. Keep job folders;
 `~/OneTake/storage/jobs` is not auto-cleaned (disk is the user's call).
 
@@ -266,6 +239,8 @@ add cuecheck's worst offset, the loudness and whether the loudness pass stayed l
   Remotion is free for individuals and companies ≤3 people; larger companies need a Remotion company licence.
 - **`No module named 'PIL'`, missing `@remotion/motion-blur`, or `vtracer: command not found`**: the install
   predates illustrated mode; rerun `install.sh`. vtracer needs Rust (`cargo install vtracer`).
+- **`image.py`: `agy made no image`**: agy is signed out (run `agy` once and log in) or the account's image
+  quota is used up; the message after the colon is agy's own reply.
 - **`cuecheck.py` FAIL**: a cue's source file changed or `at` points past the video; rerun `mix.py --sfx` and
   check `OUT.sfx.json` for the placed times.
 - Fresh machine or broken env: rerun `install.sh` (idempotent).
