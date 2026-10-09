@@ -5,6 +5,50 @@ built in Remotion. These are the lessons from a mitosis test scene that went fro
 jiggle physics off" to "that's better". The general motion rules, perception principles, frame-strip
 verification and safe rendering are in `motion.md`; this file adds what is specific to illustration.
 
+## Steps
+
+`$S`, `$J` and the rules for every mode are in `SKILL.md`. Run these in order; the Pipeline section
+below gives the detail and the reasons behind them. The worked example is the `Cell` composition
+(`remotion/src/illustrated/cell/`, sound design in `examples/cell/`): copy its structure for a new scene.
+
+1. **Beat sheet**: `$S/run.sh direction.py $J --mode illustrated` picks a structure and an opening
+   pattern the last 5 illustrated jobs did not use; build the beats on it unless the request fixes its
+   own. Then one focal mover per beat, with its anticipation and payoff. When the scene explains
+   something, write and voice the narration first (`explainer.md` steps 2–4) and time each beat to the
+   word that names it.
+2. **Art**: a flat-vector sprite sheet on a solid background from
+   `$S/run.sh image.py "PROMPT" $J/sheet.jpg [--aspect 16:9] [--ref IMG ...]` (Gemini's image model through
+   agy, no API key; `--ref` edits or restyles from up to 3 images), then
+   `$S/run.sh split.py $J/sheet.jpg $J/parts` (flags: `--bg auto|#rrggbb`, `--threshold 40`, `--downsample 4`,
+   `--min-area 200`, `--vtracer "<opts>"`). It writes `aNN.svg` per part, a labelled check sheet and
+   `assets.json`. Drop broken pieces; copy the kept SVGs to `remotion/public/illustrated/<scene>/`.
+3. **Build** in `remotion/src/illustrated/<scene>/`, authored at 1920×1080 and registered in `Root.tsx`.
+   Draw in code anything that deforms or splits. Soft things come from a precomputed, deterministic
+   position-based-dynamics simulation, not from sine wobble. Shared helpers: `illustrated/shared.ts`
+   (`sampleAt` fractional-frame blending, `trailingShift` for motion blur) and `motion.ts`
+   (`squashAlong`).
+4. **Anticipation, a 4-frame hit-pause and overshoot** on every big event. Depth layers, lighting and
+   juice on the payoff.
+5. **Check headless** before any render: `bun scripts/simcheck.ts` (NaNs, event frames), then
+   `$S/run.sh check.py illustrated --comp <Comp> --frames <each beat's settled key frame> --stills $J/stills-v1 [--words $J/vo/words.json]`.
+   It must print nothing: no text cropped, inside the 4% side margins or in the caption band, every font
+   loaded, no dead air in the narration. Give decoration that is meant to run off the frame `data-bleed`.
+   `--texts` prints every on-screen string to proofread. A new composition is registered through `checked`
+   in `Root.tsx`, or it sends no report.
+6. **Render**: `$S/run.sh remotion.py illustrated $J/visual-v1.mp4 [--comp Cell] [--concurrency 3]`, muted
+   1280×720 at 60 fps (rendered from 1920×1080 with `--scale`). Wrap it in
+   `systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 --quiet bash -c '...'` (4G for stills
+   and strips), one heavy job at a time. `--concurrency 8` is the fastest on a 20-core laptop: a 600-frame
+   1080p benchmark took 61 s at 8, 63 s at 12 and 67 s at 16, because the workers queue on Chrome's
+   compositor and the encoder, not the CPU. Check with `npx remotion benchmark --concurrencies=4,8,12`.
+   `--width 1920` renders 1080p unscaled. Each round writes new versioned paths (`visual-v2.mp4`,
+   `strips-v2/`); never overwrite or delete earlier rounds in the same command.
+7. **Frame strips**: `$S/run.sh frames.py $J/visual.mp4 $J/strips 240 780:820:2` writes the frames and a
+   contact sheet. Read every event's wind-up, hold, release and settle.
+8. **Sound**: music with a `--query` matching the confirmed tone, plus sound effects on every event
+   (`SKILL.md`, Sound effects). Mix as in `explainer.md` step 9 (`--voice $J/vo.wav` when narrated),
+   adding `--sfx`.
+
 ## Pipeline
 
 1. **Beat sheet.** For each beat, write down the one focal mover, its anticipation, its payoff, the

@@ -135,125 +135,19 @@ Work from what the user wants the viewer to get, not from keywords in the reques
    scene timing, cue placement) and don't ask again mid-pipeline. Ask again only if an input turns out
    missing or unusable (no file, corrupt file, no speech where speech was expected).
 
-## A. Edit a recording
+## The steps for each mode
 
-1. **Transcribe** (GPU, ~1 min per 18 min of audio):
-   `$S/run.sh transcribe.py INPUT.mp4 $J --lang id` → `$J/words.json`, `$J/transcript.txt`
-   Use `--lang en` / `--lang auto` when the speaker isn't speaking Indonesian.
+After the plan is confirmed, read the file for the mode and follow its steps in order. The steps live
+only there.
 
-2. **Decide the cuts** by reading `$J/transcript.txt`. Lines look like
-   `#120-134 [00:04:12.0] text…`; `[eh,]` marks fillers (removed automatically);
-   `(... 3.2s ...)` marks a pause (pauses > `--max-gap` are shortened automatically).
-   Write `$J/cuts.json` = `{"delete": [[first, last], ...], "why": {"120-134": "retake"}}` deleting:
-   - **Retakes / false starts** — when a sentence is said again, keep the *last* complete take
-     (speakers redo until it's right). Typical cue: same opening words repeated, "eh maksud saya",
-     "ulang ya", "sorry".
-   - **Self-corrections** — delete the wrong part and the correction phrase, keep the corrected statement.
-   - **Off-camera / meta talk** — "udah rekam belum?", "bentar", talking to someone else, mic checks.
-   - **Whisper hallucinations** — text in the last seconds or in long silences that doesn't fit,
-     classically "Terima kasih sudah menonton", "selamat menikmati", "subscribe". Low `prob` in words.json backs this up.
-   - Keep content even if imperfectly phrased; don't over-trim personality. When unsure, keep.
+| Mode | Read |
+|---|---|
+| **A. Edit a recording** | `references/edit.md` |
+| **B. Explainer from a topic or script** | `references/explainer.md` |
+| **C. Illustrated animation** | `references/motion.md`, then `references/illustrated-animation.md` |
 
-3. **Cut + captions** (one NVENC pass, frame-accurate):
-   `$S/run.sh cut.py INPUT.mp4 $J/words.json $J/cut.mp4 --cuts $J/cuts.json --captions`
-   Writes `cut.words.json` (words re-timed to the edit — use it for music tempo and title timing).
-   Options: `--max-gap 0.6` (tighter = punchier; 0.4 for fast-paced, 0.9 for calm tutorials), `--pad 0.12`,
-   `--keep-fillers`, `--quality medium`, no `--captions` if the user doesn't want them.
-
-4. **Music** (see below): `$S/run.sh music.py $J/music --duration <cut duration> --words $J/cut.words.json`
-
-5. **Title card** (optional, nice for the opening topic):
-   `$S/run.sh remotion.py titlecard $J/title.mov --title "Judul" --subtitle "Subjudul" --seconds 4`
-   (`--format vertical` over portrait footage)
-
-6. **Mix**: `$S/run.sh mix.py $J/cut.mp4 $J/final.mp4 --music $J/music/bed.wav --overlay $J/title.mov@0.5`
-
-## B. Explainer from a topic or script
-
-1. **Direction**: `$S/run.sh direction.py $J --mode explainer` picks a structure and an opening pattern
-   that the last 5 explainers did not use, and lists theirs. Write the script to it, and never reuse a
-   recent job's hook wording or scene order. A request that already fixes the structure (a finished
-   script, a numbered list) wins: keep the request's, and say so in the report.
-2. **Script** — if given only a topic, research it first (Facts, sources and likenesses), then write the narration as natural speech in the confirmed narration language (short sentences,
-   conversational, the hook in the first line, no greeting or outro, ~140 words per minute of target length). Save as `$J/script.txt`,
-   paragraphs = scenes. `[pause 1.0]` on its own paragraph adds silence.
-3. **Voice-over**: `$S/run.sh voiceover.py $J/script.txt $J/vo.wav` (consistent voice from `--voice "(description)"`;
-   or clone with `--ref sample.wav --ref-text "transcript"`). First run downloads the model (~several GB).
-4. **Word timings**: `$S/run.sh transcribe.py $J/vo.wav $J/vo --lang id` → `$J/vo/words.json` (`--lang` = the
-   narration language, e.g. `en`). Whisper guesses the spelling of names, brands and symbols, so give the
-   words the text you wrote: `$S/run.sh align.py $J/vo/words.json $J/captions.txt`. `captions.txt` is the
-   script as captions should read (digits as digits, `%` as a symbol, names spelled right), which can
-   differ from a `script.txt` that spells numbers out for the voice. It keeps Whisper's timings and lists
-   what it could not place; read that list.
-5. **Scenes**: write `$J/scenes.json` from the transcript timings — one scene per idea, 3–6 s each, with a point,
-   highlight or sound effect every 2–4 s inside longer scenes:
-   ```json
-   [{"start": 0, "end": 4.2, "layout": "title", "kicker": "Tips", "title": "Edit 10x Lebih Cepat", "emoji": "⚡"},
-    {"start": 4.2, "end": 11.8, "layout": "points", "title": "3 langkah",
-     "points": [{"text": "Unggah video", "at": 5.1}, {"text": "Hapus teks", "at": 7.0}]}]
-   ```
-   Layouts: `title` (hook/section), `points` (lists; set each `at` to when the narrator says it), `big` (one stat or
-   keyword), `quote`. Titles ≤ 6 words, points ≤ 5 words — the narration carries the detail.
-6. **Music**: `$S/run.sh music.py $J/music --duration <vo duration> --words $J/vo/words.json`
-7. **Check** (same arguments as the render, minus the output): `$S/run.sh check.py explainer $J/scenes.json --words $J/vo/words.json --duration <vo duration> --beats $J/music/beats.json --stills $J/stills-v1`
-   It must print nothing. It fails on a scene that holds one picture over 6 s (a caption highlight does
-   not count: the picture needs a new scene or a point), a point with under 0.8 s to be read, titles over
-   6 words and points over 5, gaps between scenes, narration that starts late, pauses over `--max-gap`
-   (1.2 s; raise it for a scripted `[pause]`) or stops over 2 s early, text cropped or inside the 4% side
-   margins, text in the caption band, and fonts that did not load. Fix `scenes.json` or the script and
-   rerun; never loosen a rule to pass. Look at the stills (one settled frame per scene), then proofread
-   every on-screen string for spelling, grammar and unsupported claims: the same command with `--texts`.
-8. **Render**: `$S/run.sh remotion.py explainer $J/scenes.json $J/visual.mp4 --words $J/vo/words.json --duration <vo duration> --beats $J/music/beats.json`
-   Scene changes snap to the nearest beat; accents pulse on the beat. Add `--format vertical` to both the
-   check and the render for a vertical video.
-   For a brand's look add `--theme $J/theme.json` = `{"palette": [...], "ink": "#…", "paper": "#…", "accent": "#…"}`.
-   `paper` is the scene text, `ink` the frame and card text; for dark text on pale scenes pass the dark tone as
-   `paper` and give `accent` a text-safe shade, since bright brand colours rarely read on a pale caption box.
-9. **Mix**: `$S/run.sh mix.py $J/visual.mp4 $J/final.mp4 --voice $J/vo.wav --music $J/music/bed.wav`
-
-## C. Illustrated animation
-
-Read `references/motion.md`, then `references/illustrated-animation.md`, before starting. The second
-holds the pipeline, the reasons behind each choice, the soft-body recipe and the extra checks for
-illustration. The worked example is the `Cell` composition (`remotion/src/illustrated/cell/`, sound
-design in `examples/cell/`): copy its structure for a new scene.
-
-1. **Beat sheet**: `$S/run.sh direction.py $J --mode illustrated` picks a structure and an opening
-   pattern the last 5 illustrated jobs did not use; build the beats on it unless the request fixes its
-   own. Then one focal mover per beat, with its anticipation and payoff. When the scene explains
-   something, write and voice the narration first (B steps 2–4) and time each beat to the word that names
-   it.
-2. **Art**: a flat-vector sprite sheet on a solid background from
-   `$S/run.sh image.py "PROMPT" $J/sheet.jpg [--aspect 16:9] [--ref IMG ...]` (Gemini's image model through
-   agy, no API key; `--ref` edits or restyles from up to 3 images), then
-   `$S/run.sh split.py $J/sheet.jpg $J/parts` (flags: `--bg auto|#rrggbb`, `--threshold 40`, `--downsample 4`,
-   `--min-area 200`, `--vtracer "<opts>"`). It writes `aNN.svg` per part, a labelled check sheet and
-   `assets.json`. Drop broken pieces; copy the kept SVGs to `remotion/public/illustrated/<scene>/`.
-3. **Build** in `remotion/src/illustrated/<scene>/`, authored at 1920×1080 and registered in `Root.tsx`.
-   Draw in code anything that deforms or splits. Soft things come from a precomputed, deterministic
-   position-based-dynamics simulation, not from sine wobble. Shared helpers: `illustrated/shared.ts`
-   (`sampleAt` fractional-frame blending, `trailingShift` for motion blur) and `motion.ts`
-   (`squashAlong`).
-4. **Anticipation, a 4-frame hit-pause and overshoot** on every big event. Depth layers, lighting and
-   juice on the payoff.
-5. **Check headless** before any render: `bun scripts/simcheck.ts` (NaNs, event frames), then
-   `$S/run.sh check.py illustrated --comp <Comp> --frames <each beat's settled key frame> --stills $J/stills-v1 [--words $J/vo/words.json]`.
-   It must print nothing: no text cropped, inside the 4% side margins or in the caption band, every font
-   loaded, no dead air in the narration. Give decoration that is meant to run off the frame `data-bleed`.
-   `--texts` prints every on-screen string to proofread. A new composition is registered through `checked`
-   in `Root.tsx`, or it sends no report.
-6. **Render**: `$S/run.sh remotion.py illustrated $J/visual-v1.mp4 [--comp Cell] [--concurrency 3]`, muted
-   1280×720 at 60 fps (rendered from 1920×1080 with `--scale`). Wrap it in
-   `systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 --quiet bash -c '...'` (4G for stills
-   and strips), one heavy job at a time. `--concurrency 8` is the fastest on a 20-core laptop: a 600-frame
-   1080p benchmark took 61 s at 8, 63 s at 12 and 67 s at 16, because the workers queue on Chrome's
-   compositor and the encoder, not the CPU. Check with `npx remotion benchmark --concurrencies=4,8,12`.
-   `--width 1920` renders 1080p unscaled. Each round writes new versioned paths (`visual-v2.mp4`,
-   `strips-v2/`); never overwrite or delete earlier rounds in the same command.
-7. **Frame strips**: `$S/run.sh frames.py $J/visual.mp4 $J/strips 240 780:820:2` writes the frames and a
-   contact sheet. Read every event's wind-up, hold, release and settle.
-8. **Sound**: music with a `--query` matching the confirmed tone, plus sound effects on every event (see
-   Sound effects). Mix as in B (`--voice $J/vo.wav` when narrated), adding `--sfx`.
+Footage plus an intro or narration: A's file, then B's or C's for the added part. The sections below
+(music, sound effects, post package, report) apply to every mode.
 
 ## Music: tempo-matched, royalty-free
 
