@@ -2,12 +2,13 @@
 """
 Render Remotion compositions from ~/OneTake/videogen/remotion (720p60).
 
-  run.sh remotion.py explainer SCENES.json OUT.mp4 --words vo.words.json --duration SEC [--beats beats.json] [--theme theme.json]
-  run.sh remotion.py titlecard OUT.mov --title "..." [--subtitle "..."] [--seconds 4] [--center]
+  run.sh remotion.py explainer SCENES.json OUT.mp4 --words vo.words.json --duration SEC [--beats beats.json] [--theme theme.json] [--format vertical]
+  run.sh remotion.py titlecard OUT.mov --title "..." [--subtitle "..."] [--seconds 4] [--center] [--format vertical]
   run.sh remotion.py illustrated OUT.mp4 [--comp Cell] [--concurrency 3] [--width 1920] [--procs 3 --frames N]
 
 SCENES.json: [{"start", "end", "layout": "title|points|big|quote", "kicker", "title", "emoji",
                "points": [{"text", "at"}]}]   (seconds on the narration timeline)
+--format vertical renders 720x1280 for TikTok, Reels and Shorts; the layout follows the frame.
 Explainer renders silent video; add narration + music with mix.py.
 Title cards render ProRes 4444 with alpha, to overlay on footage with mix.py --overlay.
 Illustrated compositions are authored at 1920x1080 and rendered scaled to 720p60, muted; mix audio with mix.py.
@@ -21,6 +22,7 @@ from pathlib import Path
 from common import REMOTION_DIR, TARGET_W, load_json, run, save_json
 
 ILLUSTRATED_W = 1920
+FORMATS = ["landscape", "vertical"]
 
 
 def snap_to_beats(scenes, beats, window=0.3):
@@ -39,14 +41,14 @@ def snap_to_beats(scenes, beats, window=0.3):
     return out
 
 
-def explainer_props(scenes, words, duration, beats=None, theme=None, captions=True):
+def explainer_props(scenes, words, duration, beats=None, theme=None, captions=True, fmt="landscape"):
     """Input props of the Explainer composition from the job's files (paths), as it will render."""
     beats = load_json(beats) if beats else {"bpm": 0, "beat_offset": 0, "beats": []}
     scenes = snap_to_beats(load_json(scenes), beats["beats"])
     scenes[-1]["end"] = duration
     return {"duration": duration, "scenes": scenes,
             "words": [{"text": w["text"], "start": w["start"], "end": w["end"]} for w in load_json(words)["words"]],
-            "bpm": beats["bpm"], "beatOffset": beats.get("beat_offset", 0), "captions": captions,
+            "bpm": beats["bpm"], "beatOffset": beats.get("beat_offset", 0), "captions": captions, "format": fmt,
             **(load_json(theme) if theme else {})}
 
 
@@ -105,6 +107,8 @@ def main():
     t.add_argument("--seconds", type=float, default=4)
     t.add_argument("--accent", default="#FF5A5F")
     t.add_argument("--center", action="store_true")
+    for p in (e, t):
+        p.add_argument("--format", default="landscape", choices=FORMATS, help="vertical renders 720x1280")
     i = sub.add_parser("illustrated")
     i.add_argument("out")
     i.add_argument("--comp", default="Cell")
@@ -115,7 +119,7 @@ def main():
     a = ap.parse_args()
 
     if a.cmd == "explainer":
-        props = explainer_props(a.scenes, a.words, a.duration, a.beats, a.theme, not a.no_captions)
+        props = explainer_props(a.scenes, a.words, a.duration, a.beats, a.theme, not a.no_captions, a.format)
         render("Explainer", a.out, props, ["--muted", "--codec=h264", "--crf=18"])
     elif a.cmd == "illustrated":
         extra = ["--muted", "--codec=h264", "--crf=18", f"--scale={a.width / ILLUSTRATED_W}",
@@ -128,7 +132,7 @@ def main():
             render(a.comp, a.out, {}, extra)
     else:
         props = {"title": a.title, "subtitle": a.subtitle, "seconds": a.seconds, "accent": a.accent,
-                 "position": "center" if a.center else "lower-third"}
+                 "position": "center" if a.center else "lower-third", "format": a.format}
         render("TitleCard", a.out, props,
                ["--codec=prores", "--prores-profile=4444", "--pixel-format=yuva444p10le", "--image-format=png"])
 

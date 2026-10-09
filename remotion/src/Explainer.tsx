@@ -1,8 +1,8 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
-import { Captions } from "./Captions";
+import { captionLayout, Captions } from "./Captions";
 import { breathe, exit, POP, rig, SOFT, squash, stagger } from "./motion";
-import { beatPhase, DEFAULT_PALETTE, fontFamily, INK, PAPER, Scene, Word } from "./theme";
+import { beatPhase, DEFAULT_PALETTE, fontFamily, Format, INK, PAPER, Scene, Word } from "./theme";
 
 export type ExplainerProps = {
   duration: number;
@@ -18,6 +18,8 @@ export type ExplainerProps = {
   /** Caption highlight; defaults to a palette colour. */
   accent?: string;
   captions?: boolean;
+  /** Sets the frame size (Root.tsx); the layout follows the frame. */
+  format?: Format;
 };
 
 type Tones = { ink: string; paper: string };
@@ -30,7 +32,10 @@ const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: numbe
   ink: INK,
   paper: PAPER,
 }) => {
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
+  // A vertical frame is narrower: smaller type, tighter sides, and room at the top for the app's own bar.
+  const vertical = height > width;
+  const side = vertical ? 56 : 90;
   const local = Math.round((t - scene.start) * fps);
   // The panel settles without a bounce; the parts on it arrive one after another.
   const panel = rig(local, fps, SOFT).v;
@@ -40,7 +45,7 @@ const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: numbe
   const [ty, tx] = squash(title.vel);
   const out = exit(Math.round((scene.end - t) * fps));
   const layout = scene.layout ?? (scene.points?.length ? "points" : "title");
-  const titleSize = layout === "big" ? 120 : layout === "title" ? 84 : 60;
+  const titleSize = (layout === "big" ? 120 : layout === "title" ? 84 : 60) * (vertical ? 0.8 : 1);
 
   return (
     <AbsoluteFill
@@ -48,7 +53,7 @@ const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: numbe
         background: color,
         opacity: out,
         transform: `scale(${(0.94 + 0.06 * panel) * (0.98 + 0.02 * out)})`,
-        padding: "70px 90px 150px",
+        padding: `${vertical ? 150 : 70}px ${side}px ${captionLayout(width, height).reserve}px`,
         justifyContent: layout === "points" ? "flex-start" : "center",
         alignItems: layout === "points" ? "flex-start" : "center",
         fontFamily,
@@ -93,7 +98,7 @@ const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: numbe
           fontSize: titleSize,
           lineHeight: 1.08,
           textAlign: layout === "points" ? "left" : "center",
-          maxWidth: 1100,
+          maxWidth: width - 2 * side,
           opacity: Math.min(1, title.v * 1.5),
           transform: `translateY(${(1 - title.v) * 50}px) scale(${tx}, ${ty})`,
           textShadow: `0 6px 0 ${INK}33`,
@@ -129,7 +134,7 @@ const SceneView: React.FC<{ scene: Scene; color: string; t: number; pulse: numbe
                   alignItems: "center",
                   gap: 18,
                   fontWeight: 700,
-                  fontSize: 40,
+                  fontSize: vertical ? 36 : 40,
                   background: PAPER,
                   color: INK,
                   padding: "12px 24px",

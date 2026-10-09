@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 
 MAX_WORDS = 6
+PORTRAIT_MAX_WORDS = 4
 FONT = "Plus Jakarta Sans ExtraBold"
 PAPER = "&H00F7FDFF"  # caption text colour (ASS &HAABBGGRR), same as the Pop style
 
@@ -36,7 +37,14 @@ def write_ass(words, path, accent="&H0000B3FF", width=1280, height=720):
     """
     words: [{"text", "start", "end"}] on the OUTPUT timeline.
     accent: ASS colour &HAABBGGRR for the active word (default warm yellow #FFB300).
+    Type is sized from the short side. A portrait frame gets shorter lines, narrower margins and
+    captions raised clear of the controls a phone app draws over the bottom of the video.
     """
+    portrait = height > width
+    short = min(width, height)
+    size, box = round(short * 0.065), round(short / 60)
+    side = round(short * (56 if portrait else 80) / 720)
+    bottom = round(height * (0.19 if portrait else 0.075))
     header = f"""[Script Info]
 ScriptType: v4.00+
 PlayResX: {width}
@@ -46,13 +54,13 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Pop,{FONT},{round(height * 0.065)},&H00F7FDFF,&H00F7FDFF,&H001F1414,&H001F1414,0,0,0,0,100,100,0,0,3,12,0,2,80,80,{round(height * 0.075)},1
+Style: Pop,{FONT},{size},&H00F7FDFF,&H00F7FDFF,&H001F1414,&H001F1414,0,0,0,0,100,100,0,0,3,{box},0,2,{side},{side},{bottom},1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
     events = []
-    lines = group_lines(words)
+    lines = group_lines(words, PORTRAIT_MAX_WORDS if portrait else MAX_WORDS)
     for n, line in enumerate(lines):
         # Linger after the last word, but never overlap the next line.
         line_end = line[-1]["end"] + 0.25

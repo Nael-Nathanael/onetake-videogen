@@ -13,6 +13,9 @@ export const PAPER = "#FFFDF7";
 
 export type Word = { text: string; start: number; end: number };
 
+/** Landscape is 1280×720; vertical is 720×1280, for TikTok, Reels and Shorts. */
+export type Format = "landscape" | "vertical";
+
 export type Point = { text: string; at: number };
 
 export type Scene = {

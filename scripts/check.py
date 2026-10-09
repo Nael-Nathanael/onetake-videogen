@@ -4,7 +4,7 @@ The gate before a generated video renders. Prints one line per problem and exits
 when the video is clean.
 
   run.sh check.py explainer SCENES.json --words W --duration SEC [--beats B] [--theme T] [--no-captions]
-                  [--max-gap 1.2] [--stills DIR] [--texts]
+                  [--format vertical] [--max-gap 1.2] [--stills DIR] [--texts]
   run.sh check.py illustrated --comp NAME --frames 120,480,... [--words W] [--max-gap 1.2]
                   [--stills DIR] [--texts]
 
@@ -30,7 +30,7 @@ import tempfile
 from pathlib import Path
 
 from common import REMOTION_DIR, TARGET_FPS, load_json, run, save_json
-from remotion import explainer_props
+from remotion import FORMATS, explainer_props
 
 TITLE_WORDS, POINT_WORDS = 6, 5
 # A scene is one idea of 3-6 s; past that the picture has to change (a new scene or a point).
@@ -127,6 +127,7 @@ def main():
     e.add_argument("--beats")
     e.add_argument("--theme")
     e.add_argument("--no-captions", action="store_true")
+    e.add_argument("--format", default="landscape", choices=FORMATS)
     i = sub.add_parser("illustrated")
     i.add_argument("--comp", required=True)
     i.add_argument("--frames", required=True, help="comma-separated frame numbers: each beat's settled key frame")
@@ -139,7 +140,7 @@ def main():
 
     found = []
     if a.cmd == "explainer":
-        props = explainer_props(a.scenes, a.words, a.duration, a.beats, a.theme, not a.no_captions)
+        props = explainer_props(a.scenes, a.words, a.duration, a.beats, a.theme, not a.no_captions, a.format)
         scenes, words, duration = props["scenes"], props["words"], a.duration
         frames = settled_frames(scenes)
         found += scene_problems(scenes)

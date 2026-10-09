@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { exit, POP, rig, squash } from "./motion";
-import { fontFamily, INK, PAPER } from "./theme";
+import { fontFamily, Format, INK, PAPER } from "./theme";
 
 export type TitleCardProps = {
   title: string;
@@ -9,12 +9,17 @@ export type TitleCardProps = {
   accent?: string;
   seconds: number;
   position?: "lower-third" | "center";
+  /** Sets the frame size (Root.tsx); the layout follows the frame. */
+  format?: Format;
 };
 
 /** Transparent overlay (lower third or centered title) composited onto footage with ffmpeg. */
 export const TitleCard: React.FC<TitleCardProps> = ({ title, subtitle, accent = "#FF5A5F", position = "lower-third" }) => {
   const frame = useCurrentFrame();
-  const { fps, durationInFrames } = useVideoConfig();
+  const { fps, durationInFrames, width, height } = useVideoConfig();
+  // On a vertical frame the lower third sits above the captions and the app's own controls.
+  const vertical = height > width;
+  const side = vertical ? 56 : 70;
   const card = rig(frame, fps, POP);
   const [cx, cy] = squash(card.vel);
   // The shadow lands after the card: follow-through instead of a welded-on drop shadow.
@@ -29,7 +34,7 @@ export const TitleCard: React.FC<TitleCardProps> = ({ title, subtitle, accent = 
       style={{
         justifyContent: center ? "center" : "flex-end",
         alignItems: center ? "center" : "flex-start",
-        padding: center ? 0 : "0 0 150px 70px",
+        padding: center ? `0 ${side}px` : `0 ${side}px ${vertical ? Math.round(height * 0.34) : 150}px`,
         fontFamily,
         opacity: out,
         transform: `translateY(${(1 - out) * -14}px)`,
@@ -42,7 +47,7 @@ export const TitleCard: React.FC<TitleCardProps> = ({ title, subtitle, accent = 
             background: accent,
             color: PAPER,
             fontWeight: 800,
-            fontSize: center ? 88 : 54,
+            fontSize: (center ? 88 : 54) * (vertical && center ? 0.8 : 1),
             padding: "10px 26px",
             borderRadius: 16,
             boxShadow: `${8 * shadow}px ${8 * shadow}px 0 ${INK}`,

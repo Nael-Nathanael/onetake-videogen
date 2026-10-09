@@ -22,9 +22,12 @@ skill directory (see README.md).
 **Confirm once, then run automatically** (see "Understand the request" below): one short plan
 confirmation before any heavy work, then every editorial decision is yours until the video is done.
 
-Production format is **1280×720**. Sources above 720p are downscaled; an edited recording keeps its own
-frame rate (30 fps stays 30 fps), and generated video (explainers, title cards, illustrated scenes)
-renders at 60 fps.
+Production format is **720p**: 1280×720 landscape, or 720×1280 vertical for TikTok, Reels and Shorts.
+Sources above 720p are downscaled on their short side, so portrait footage stays portrait; an edited
+recording keeps its own frame rate (30 fps stays 30 fps), and generated video (explainers, title cards,
+illustrated scenes) renders at 60 fps. Explainers and title cards take `--format vertical`: type, margins
+and captions follow the frame, with captions raised clear of the app's own controls. Illustrated scenes
+(C) are landscape.
 
 ## Motion (all modes)
 
@@ -86,6 +89,8 @@ Work from what the user wants the viewer to get, not from keywords in the reques
    Then fill in the rest, each with a default you can justify from the request:
    - **Length:** from the footage, the script (~140 words per minute) or the request; otherwise 45–90 s
      for B, 20–45 s for C.
+   - **Format:** vertical when the request names TikTok, Reels, Shorts or a phone, or the footage is
+     portrait; landscape otherwise.
    - **Language** of narration and captions: the request's language unless stated.
    - **Tone:** upbeat and punchy by default; calm and documentary only when asked. It sets the motion feel, the music `--query` and
      how many sound effects.
@@ -141,6 +146,7 @@ Work from what the user wants the viewer to get, not from keywords in the reques
 
 5. **Title card** (optional, nice for the opening topic):
    `$S/run.sh remotion.py titlecard $J/title.mov --title "Judul" --subtitle "Subjudul" --seconds 4`
+   (`--format vertical` over portrait footage)
 
 6. **Mix**: `$S/run.sh mix.py $J/cut.mp4 $J/final.mp4 --music $J/music/bed.wav --overlay $J/title.mov@0.5`
 
@@ -176,7 +182,8 @@ Work from what the user wants the viewer to get, not from keywords in the reques
    rerun; never loosen a rule to pass. Look at the stills (one settled frame per scene), then proofread
    every on-screen string for spelling, grammar and unsupported claims: the same command with `--texts`.
 7. **Render**: `$S/run.sh remotion.py explainer $J/scenes.json $J/visual.mp4 --words $J/vo/words.json --duration <vo duration> --beats $J/music/beats.json`
-   Scene changes snap to the nearest beat; accents pulse on the beat.
+   Scene changes snap to the nearest beat; accents pulse on the beat. Add `--format vertical` to both the
+   check and the render for a vertical video.
    For a brand's look add `--theme $J/theme.json` = `{"palette": [...], "ink": "#…", "paper": "#…", "accent": "#…"}`.
    `paper` is the scene text, `ink` the frame and card text; for dark text on pale scenes pass the dark tone as
    `paper` and give `accent` a text-safe shade, since bright brand colours rarely read on a pale caption box.
