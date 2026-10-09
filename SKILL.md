@@ -61,6 +61,24 @@ Viewers decide in the first seconds and leave at the first dull stretch. Every v
 Excitement comes from pace and change, not from jittery motion: the motion rules still hold, so each
 change stays easy to read.
 
+## Facts, sources and likenesses (all modes)
+
+A video that states something false, or shows something fake as real, harms the person publishing it.
+
+- **Never invent** a fact, number, price, date, quote, feature or testimonial. Each one comes from the
+  user, a file they gave, or a source you read. A claim with no source is cut, or asked about in the
+  plan confirmation.
+- **Research a factual topic before writing the script**: primary and reputable sources, the date of
+  the information for anything recent, disputed points marked as disputed. Every source goes in
+  `post.json` `sources`, and a number on screen matches its source to the digit.
+- **An edit keeps the speaker's meaning.** No cut joins words into a statement they did not make.
+- **No fake real things**: no real person's likeness in generated art, no cloned voice except from a
+  sample the user gave of a voice they may use, no generated brand logo (use the file the user gave),
+  no generated document, screenshot or app screen shown as the real one. Real people and events are
+  drawn as plain illustration or symbols.
+- **Say what is generated.** Voice, illustrations and music made by a model are listed in `post.json`
+  `generated` and in the report.
+
 ## Understand the request, confirm once, then run
 
 Work from what the user wants the viewer to get, not from keywords in the request.
@@ -152,7 +170,7 @@ Work from what the user wants the viewer to get, not from keywords in the reques
 
 ## B. Explainer from a topic or script
 
-1. **Script** — if given only a topic, write the narration as natural speech in the confirmed narration language (short sentences,
+1. **Script** — if given only a topic, research it first (Facts, sources and likenesses), then write the narration as natural speech in the confirmed narration language (short sentences,
    conversational, the hook in the first line, no greeting or outro, ~140 words per minute of target length). Save as `$J/script.txt`,
    paragraphs = scenes. `[pause 1.0]` on its own paragraph adds silence.
 2. **Voice-over**: `$S/run.sh voiceover.py $J/script.txt $J/vo.wav` (consistent voice from `--voice "(description)"`;
@@ -304,7 +322,8 @@ thumbnail. With `--scenes` the cover is the first scene once its title has lande
 
 When done, tell the user: final path, `post.txt` and `cover.jpg`, any place where you departed from the confirmed plan and why,
 duration before → after, a short list of what was cut (counts + the
-notable retakes), the music track(s) with tempo and the credits text, and render times. With sound effects,
+notable retakes), the music track(s) with tempo and the credits text, the sources behind the claims, what
+is AI-generated, anything you could not verify, and render times. With sound effects,
 add cuecheck's worst offset, the loudness and whether the loudness pass stayed linear. Keep job folders;
 `~/OneTake/storage/jobs` is not auto-cleaned (disk is the user's call).
 
