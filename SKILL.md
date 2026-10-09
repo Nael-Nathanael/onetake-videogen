@@ -273,9 +273,36 @@ scene change, a cue per event in an illustrated scene. Pass absolute paths (`run
 
 Give the user `$J/audio/CREDITS.txt` with the music credits.
 
+## Post package (any mode)
+
+A finished video ships with what gets pasted when it is published. Write `$J/post.json` in the video's
+language:
+
+```json
+{"title": "What gives AI fiction away?", "hook": "A novel pulled for AI",
+ "caption": "…", "hashtags": ["ai", "writing", "fiction"],
+ "sources": ["https://…"], "generated": ["voice (VoxCPM2)"],
+ "chapters": [{"at": "0:00", "title": "The pulled novel"}]}
+```
+
+- `title`: up to 100 characters. `hook`: the opening title exactly as it reads on screen.
+- `caption`: up to 2200 characters. The hook line, 2–4 short lines of what the viewer gets, and a call
+  to action when the video has one.
+- `hashtags`: 3–8, no `#`, no spaces.
+- `sources`: every URL or document a claim rests on; `[]` when the video makes none.
+- `generated`: what is AI-made (voice, illustrations, music); `[]` for an edit of real footage.
+- `chapters`: only for a video with at least 3 parts that start 10 s or more apart, the first at 0:00.
+  Long edited recordings need them most.
+
+Then `$S/run.sh post.py $J/post.json --video $J/final.mp4 [--scenes $J/scenes.json]`. It prints one line
+per problem; fix the file until it prints none. It writes `$J/post.txt` (paste-ready: title, caption,
+hashtags, chapters, sources, the music and sound credits, the AI disclosure) and `$J/cover.jpg` for the
+thumbnail. With `--scenes` the cover is the first scene once its title has landed; otherwise pass
+`--cover-at <seconds>` for the frame that shows the hook.
+
 ## Report back
 
-When done, tell the user: final path, any place where you departed from the confirmed plan and why,
+When done, tell the user: final path, `post.txt` and `cover.jpg`, any place where you departed from the confirmed plan and why,
 duration before → after, a short list of what was cut (counts + the
 notable retakes), the music track(s) with tempo and the credits text, and render times. With sound effects,
 add cuecheck's worst offset, the loudness and whether the loudness pass stayed linear. Keep job folders;
