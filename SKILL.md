@@ -167,12 +167,20 @@ Work from what the user wants the viewer to get, not from keywords in the reques
    Layouts: `title` (hook/section), `points` (lists; set each `at` to when the narrator says it), `big` (one stat or
    keyword), `quote`. Titles ≤ 6 words, points ≤ 5 words — the narration carries the detail.
 5. **Music**: `$S/run.sh music.py $J/music --duration <vo duration> --words $J/vo/words.json`
-6. **Render**: `$S/run.sh remotion.py explainer $J/scenes.json $J/visual.mp4 --words $J/vo/words.json --duration <vo duration> --beats $J/music/beats.json`
+6. **Check** (same arguments as the render, minus the output): `$S/run.sh check.py explainer $J/scenes.json --words $J/vo/words.json --duration <vo duration> --beats $J/music/beats.json --stills $J/stills-v1`
+   It must print nothing. It fails on a scene that holds one picture over 6 s (a caption highlight does
+   not count: the picture needs a new scene or a point), a point with under 0.8 s to be read, titles over
+   6 words and points over 5, gaps between scenes, narration that starts late, pauses over `--max-gap`
+   (1.2 s; raise it for a scripted `[pause]`) or stops over 2 s early, text cropped or inside the 4% side
+   margins, text in the caption band, and fonts that did not load. Fix `scenes.json` or the script and
+   rerun; never loosen a rule to pass. Look at the stills (one settled frame per scene), then proofread
+   every on-screen string for spelling, grammar and unsupported claims: the same command with `--texts`.
+7. **Render**: `$S/run.sh remotion.py explainer $J/scenes.json $J/visual.mp4 --words $J/vo/words.json --duration <vo duration> --beats $J/music/beats.json`
    Scene changes snap to the nearest beat; accents pulse on the beat.
    For a brand's look add `--theme $J/theme.json` = `{"palette": [...], "ink": "#…", "paper": "#…", "accent": "#…"}`.
    `paper` is the scene text, `ink` the frame and card text; for dark text on pale scenes pass the dark tone as
    `paper` and give `accent` a text-safe shade, since bright brand colours rarely read on a pale caption box.
-7. **Mix**: `$S/run.sh mix.py $J/visual.mp4 $J/final.mp4 --voice $J/vo.wav --music $J/music/bed.wav`
+8. **Mix**: `$S/run.sh mix.py $J/visual.mp4 $J/final.mp4 --voice $J/vo.wav --music $J/music/bed.wav`
 
 ## C. Illustrated animation
 
@@ -197,7 +205,12 @@ design in `examples/cell/`): copy its structure for a new scene.
    (`squashAlong`).
 4. **Anticipation, a 4-frame hit-pause and overshoot** on every big event. Depth layers, lighting and
    juice on the payoff.
-5. **Check headless**: `bun scripts/simcheck.ts` (NaNs, event frames) before any render.
+5. **Check headless** before any render: `bun scripts/simcheck.ts` (NaNs, event frames), then
+   `$S/run.sh check.py illustrated --comp <Comp> --frames <each beat's settled key frame> --stills $J/stills-v1 [--words $J/vo/words.json]`.
+   It must print nothing: no text cropped, inside the 4% side margins or in the caption band, every font
+   loaded, no dead air in the narration. Give decoration that is meant to run off the frame `data-bleed`.
+   `--texts` prints every on-screen string to proofread. A new composition is registered through `checked`
+   in `Root.tsx`, or it sends no report.
 6. **Render**: `$S/run.sh remotion.py illustrated $J/visual-v1.mp4 [--comp Cell] [--concurrency 3]`, muted
    1280×720 at 60 fps (rendered from 1920×1080 with `--scale`). Wrap it in
    `systemd-run --user --scope -p MemoryMax=6G -p MemorySwapMax=0 --quiet bash -c '...'` (4G for stills

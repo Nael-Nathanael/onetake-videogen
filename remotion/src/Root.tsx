@@ -5,6 +5,16 @@ import { TitleCard, TitleCardProps } from "./TitleCard";
 import { Cell, cellDuration, cellFps } from "./illustrated/cell/Cell";
 import { AiFlat, aiFlatDuration, aiFlatFps } from "./illustrated/aiflat/AiFlat";
 import { AiPas, aiPasDuration, aiPasFps } from "./illustrated/aipas/AiPas";
+import { withLayoutReport } from "./layoutReport";
+
+// Register a composition's component through this, so scripts/check.py can read its on-screen text.
+const checked = {
+  Explainer: withLayoutReport(Explainer),
+  TitleCard: withLayoutReport(TitleCard),
+  Cell: withLayoutReport(Cell),
+  AiFlat: withLayoutReport(AiFlat),
+  AiPas: withLayoutReport(AiPas),
+};
 
 // Production format: 720p60.
 const W = 1280;
@@ -41,7 +51,7 @@ export const Root: React.FC = () => (
   <>
     <Composition
       id="Explainer"
-      component={Explainer}
+      component={checked.Explainer}
       width={W}
       height={H}
       fps={FPS}
@@ -51,7 +61,7 @@ export const Root: React.FC = () => (
     />
     <Composition
       id="TitleCard"
-      component={TitleCard}
+      component={checked.TitleCard}
       width={W}
       height={H}
       fps={FPS}
@@ -60,8 +70,8 @@ export const Root: React.FC = () => (
       calculateMetadata={({ props }) => ({ durationInFrames: Math.max(1, Math.ceil(props.seconds * FPS)) })}
     />
     {/* Illustrated compositions are authored in 1920×1080 coordinates; remotion.py renders them with --scale to 720p. */}
-    <Composition id="Cell" component={Cell} width={1920} height={1080} fps={cellFps} durationInFrames={cellDuration} />
-    <Composition id="AiFlat" component={AiFlat} width={1920} height={1080} fps={aiFlatFps} durationInFrames={aiFlatDuration} />
-    <Composition id="AiPas" component={AiPas} width={1920} height={1080} fps={aiPasFps} durationInFrames={aiPasDuration} />
+    <Composition id="Cell" component={checked.Cell}width={1920} height={1080} fps={cellFps} durationInFrames={cellDuration} />
+    <Composition id="AiFlat" component={checked.AiFlat}width={1920} height={1080} fps={aiFlatFps} durationInFrames={aiFlatDuration} />
+    <Composition id="AiPas" component={checked.AiPas}width={1920} height={1080} fps={aiPasFps} durationInFrames={aiPasDuration} />
   </>
 );

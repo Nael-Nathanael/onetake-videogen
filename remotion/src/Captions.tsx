@@ -4,6 +4,11 @@ import { POP, rig, SOFT } from "./motion";
 import { fontFamily, INK, PAPER, Word } from "./theme";
 
 const MAX_WORDS = 6;
+const FONT_SIZE = 44;
+const PAD_Y = 10;
+const BOTTOM = 56;
+/** One caption line with its box. */
+const LINE_HEIGHT = FONT_SIZE * 1.25 + 2 * PAD_Y;
 
 /** Group words into short caption lines, breaking on punctuation, pauses and length. */
 export const toLines = (words: Word[]) => {
@@ -34,15 +39,20 @@ export const Captions: React.FC<{ words: Word[]; accent: string; ink?: string; p
   const t = frame / fps;
   const lines = useMemo(() => toLines(words), [words]);
   const line = lines.find((l) => t >= l[0].start - 0.05 && t <= l[l.length - 1].end + 0.25);
-  if (!line) return null;
+  // The band a caption line fills, marked even between lines so the check gate can tell what runs into it.
+  const band = <div data-caption-band style={{ position: "absolute", bottom: BOTTOM, width: "100%", height: LINE_HEIGHT }} />;
+  if (!line) return band;
 
   const lineIn = rig(frame - Math.round(line[0].start * fps), fps, SOFT).v;
 
   return (
+    <>
+    {band}
     <div
+      data-captions
       style={{
         position: "absolute",
-        bottom: 56,
+        bottom: BOTTOM,
         width: "100%",
         display: "flex",
         justifyContent: "center",
@@ -54,10 +64,10 @@ export const Captions: React.FC<{ words: Word[]; accent: string; ink?: string; p
         style={{
           fontFamily,
           fontWeight: 800,
-          fontSize: 44,
+          fontSize: FONT_SIZE,
           background: ink,
           color: paper,
-          padding: "10px 22px",
+          padding: `${PAD_Y}px 22px`,
           borderRadius: 18,
           maxWidth: 1100,
           textAlign: "center",
@@ -86,5 +96,6 @@ export const Captions: React.FC<{ words: Word[]; accent: string; ink?: string; p
         })}
       </div>
     </div>
+    </>
   );
 };

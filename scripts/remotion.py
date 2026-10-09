@@ -39,6 +39,17 @@ def snap_to_beats(scenes, beats, window=0.3):
     return out
 
 
+def explainer_props(scenes, words, duration, beats=None, theme=None, captions=True):
+    """Input props of the Explainer composition from the job's files (paths), as it will render."""
+    beats = load_json(beats) if beats else {"bpm": 0, "beat_offset": 0, "beats": []}
+    scenes = snap_to_beats(load_json(scenes), beats["beats"])
+    scenes[-1]["end"] = duration
+    return {"duration": duration, "scenes": scenes,
+            "words": [{"text": w["text"], "start": w["start"], "end": w["end"]} for w in load_json(words)["words"]],
+            "bpm": beats["bpm"], "beatOffset": beats.get("beat_offset", 0), "captions": captions,
+            **(load_json(theme) if theme else {})}
+
+
 def render(comp, out, props, extra):
     with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
         props_path = f.name
@@ -104,14 +115,7 @@ def main():
     a = ap.parse_args()
 
     if a.cmd == "explainer":
-        scenes = load_json(a.scenes)
-        words = [{"text": w["text"], "start": w["start"], "end": w["end"]} for w in load_json(a.words)["words"]]
-        beats = load_json(a.beats) if a.beats else {"bpm": 0, "beat_offset": 0, "beats": []}
-        scenes = snap_to_beats(scenes, beats["beats"])
-        scenes[-1]["end"] = a.duration
-        props = {"duration": a.duration, "scenes": scenes, "words": words, "bpm": beats["bpm"],
-                 "beatOffset": beats.get("beat_offset", 0), "captions": not a.no_captions,
-                 **(load_json(a.theme) if a.theme else {})}
+        props = explainer_props(a.scenes, a.words, a.duration, a.beats, a.theme, not a.no_captions)
         render("Explainer", a.out, props, ["--muted", "--codec=h264", "--crf=18"])
     elif a.cmd == "illustrated":
         extra = ["--muted", "--codec=h264", "--crf=18", f"--scale={a.width / ILLUSTRATED_W}",
