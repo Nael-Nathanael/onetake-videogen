@@ -5,7 +5,7 @@
 1. **Direction**: `$S/run.sh direction.py $J --mode explainer` picks a structure and an opening pattern
    that the last 5 explainers did not use, and lists theirs. Write the script to it, and never reuse a
    recent job's hook wording or scene order. A request that already fixes the structure (a finished
-   script, a numbered list) wins: keep the request's, and say so in the report.
+   script, a numbered list) wins: keep its structure, and say so in the report.
 2. **Script** — if given only a topic, research it first (`SKILL.md`, Facts, sources and likenesses), then write the narration as natural speech in the confirmed narration language (short sentences,
    conversational, the hook in the first line, no greeting or outro, ~140 words per minute of target length). Save as `$J/script.txt`,
    paragraphs = scenes. `[pause 1.0]` on its own paragraph adds silence.
@@ -15,7 +15,7 @@
    narration language, e.g. `en`). Whisper guesses the spelling of names, brands and symbols, so give the
    words the text you wrote: `$S/run.sh align.py $J/vo/words.json $J/captions.txt`. `captions.txt` is the
    script as captions should read (digits as digits, `%` as a symbol, names spelled right), which can
-   differ from a `script.txt` that spells numbers out for the voice. It keeps Whisper's timings and lists
+   differ from a `script.txt` that spells numbers out for the voice. `align.py` keeps Whisper's timings and lists
    what it could not place; read that list.
 5. **Scenes**: write `$J/scenes.json` from the transcript timings — one scene per idea, 3–6 s each, with a point,
    highlight or sound effect every 2–4 s inside longer scenes:
@@ -30,7 +30,7 @@
 7. **Check** (same arguments as the render, minus the output): `$S/run.sh check.py explainer $J/scenes.json --words $J/vo/words.json --duration <vo duration> --beats $J/music/beats.json --stills $J/stills-v1`
    It must print nothing. It fails on a scene that holds one picture over 6 s (a caption highlight does
    not count: the picture needs a new scene or a point), a point with under 0.8 s to be read, titles over
-   6 words and points over 5, gaps between scenes, narration that starts late, pauses over `--max-gap`
+   6 words and points over 5, gaps between scenes, narration that starts over 1.5 s in, pauses longer than `--max-gap`
    (1.2 s; raise it for a scripted `[pause]`) or stops over 2 s early, text cropped or inside the 4% side
    margins, text in the caption band, and fonts that did not load. Fix `scenes.json` or the script and
    rerun; never loosen a rule to pass. Look at the stills (one settled frame per scene), then proofread

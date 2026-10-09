@@ -1,7 +1,7 @@
 ---
 name: onetake-videogen
 description: >-
-  Local video production on an NVIDIA GPU, built on OneTake. Edits raw talking-head and screen recordings (Whisper transcript → removes fillers, retakes and long pauses → frame-accurate NVENC cut), burns word-by-word captions, adds tempo-matched royalty-free music, sound effects on every beat, voice-over (VoxCPM2, Indonesian and 29 more languages), animated explainers from a topic or script, and Kurzgesagt-style illustrated animation (AI-generated flat-vector art, soft-body physics in Remotion). Use it whenever the user's goal involves making, editing or improving a video, in any language or wording, with or without a file: cutting mistakes, adding captions, music, sound effects, a voice-over or an intro, or turning a topic into an animation. It works out the right workflow from the request and confirms a short plan with the user before rendering. Output 720p60 MP4, -14 LUFS.
+  Local video production on an NVIDIA GPU, built on OneTake. Edits raw talking-head and screen recordings (Whisper transcript → removes fillers, retakes and long pauses → frame-accurate NVENC cut), burns word-by-word captions, adds tempo-matched royalty-free music, sound effects on every beat, voice-over (VoxCPM2, Indonesian and 29 more languages), animated explainers from a topic or script, and Kurzgesagt-style illustrated animation (AI-generated flat-vector art, soft-body physics in Remotion). Use it whenever the user's goal involves making, editing or improving a video, in any language or wording, with or without a file: cutting mistakes, adding captions, music, sound effects, a voice-over or an intro, or turning a topic into an animation. It works out the right workflow from the request and confirms a short plan with the user before rendering. Output 720p60 MP4, landscape or vertical (TikTok, Reels, Shorts), -14 LUFS, with the caption, hashtags and thumbnail to post it.
 ---
 
 # OneTake videogen
@@ -23,10 +23,10 @@ skill directory (see README.md).
 confirmation before any heavy work, then every editorial decision is yours until the video is done.
 
 Production format is **720p**: 1280×720 landscape, or 720×1280 vertical for TikTok, Reels and Shorts.
-Sources above 720p are downscaled on their short side, so portrait footage stays portrait; an edited
-recording keeps its own frame rate (30 fps stays 30 fps), and generated video (explainers, title cards,
+Sources above 720p are downscaled on their short side, so portrait footage stays portrait. An edited
+recording keeps its own frame rate (30 fps stays 30 fps); generated video (explainers, title cards,
 illustrated scenes) renders at 60 fps. Explainers and title cards take `--format vertical`: type, margins
-and captions follow the frame, with captions raised clear of the app's own controls. Illustrated scenes
+and captions follow the frame, with captions raised clear of the app's controls. Illustrated scenes
 (C) are landscape.
 
 ## Motion (all modes)
@@ -66,17 +66,17 @@ change stays easy to read.
 A video that states something false, or shows something fake as real, harms the person publishing it.
 
 - **Never invent** a fact, number, price, date, quote, feature or testimonial. Each one comes from the
-  user, a file they gave, or a source you read. A claim with no source is cut, or asked about in the
+  user, a file they gave, or a source you read. Cut a claim with no source, or ask about it in the
   plan confirmation.
 - **Research a factual topic before writing the script**: primary and reputable sources, the date of
   the information for anything recent, disputed points marked as disputed. Every source goes in
   `post.json` `sources`, and a number on screen matches its source to the digit.
 - **An edit keeps the speaker's meaning.** No cut joins words into a statement they did not make.
-- **No fake real things**: no real person's likeness in generated art, no cloned voice except from a
+- **Nothing fake shown as real**: no real person's likeness in generated art, no cloned voice except from a
   sample the user gave of a voice they may use, no generated brand logo (use the file the user gave),
   no generated document, screenshot or app screen shown as the real one. Real people and events are
   drawn as plain illustration or symbols.
-- **Say what is generated.** Voice, illustrations and music made by a model are listed in `post.json`
+- **Say what is generated.** List voice, illustrations and music made by a model in `post.json`
   `generated` and in the report.
 
 ## Understand the request, confirm once, then run
@@ -146,7 +146,7 @@ only there.
 | **B. Explainer from a topic or script** | `references/explainer.md` |
 | **C. Illustrated animation** | `references/motion.md`, then `references/illustrated-animation.md` |
 
-Footage plus an intro or narration: A's file, then B's or C's for the added part. The sections below
+Footage plus an intro: A's file, then B's or C's for the intro. The sections below
 (music, sound effects, post package, report) apply to every mode.
 
 ## Music: tempo-matched, royalty-free

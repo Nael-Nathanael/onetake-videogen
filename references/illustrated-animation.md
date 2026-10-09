@@ -32,8 +32,8 @@ below gives the detail and the reasons behind them. The worked example is the `C
 5. **Check headless** before any render: `bun scripts/simcheck.ts` (NaNs, event frames), then
    `$S/run.sh check.py illustrated --comp <Comp> --frames <each beat's settled key frame> --stills $J/stills-v1 [--words $J/vo/words.json]`.
    It must print nothing: no text cropped, inside the 4% side margins or in the caption band, every font
-   loaded, no dead air in the narration. Give decoration that is meant to run off the frame `data-bleed`.
-   `--texts` prints every on-screen string to proofread. A new composition is registered through `checked`
+   loaded, no dead air in the narration. Mark decoration that is meant to run off the frame with `data-bleed`.
+   `--texts` prints every on-screen string to proofread. Register a new composition through `checked`
    in `Root.tsx`, or it sends no report.
 6. **Render**: `$S/run.sh remotion.py illustrated $J/visual-v1.mp4 [--comp Cell] [--concurrency 3]`, muted
    1280×720 at 60 fps (rendered from 1920×1080 with `--scale`). Wrap it in
