@@ -152,7 +152,11 @@ Work from what the user wants the viewer to get, not from keywords in the reques
 2. **Voice-over**: `$S/run.sh voiceover.py $J/script.txt $J/vo.wav` (consistent voice from `--voice "(description)"`;
    or clone with `--ref sample.wav --ref-text "transcript"`). First run downloads the model (~several GB).
 3. **Word timings**: `$S/run.sh transcribe.py $J/vo.wav $J/vo --lang id` → `$J/vo/words.json` (`--lang` = the
-   narration language, e.g. `en`).
+   narration language, e.g. `en`). Whisper guesses the spelling of names, brands and symbols, so give the
+   words the text you wrote: `$S/run.sh align.py $J/vo/words.json $J/captions.txt`. `captions.txt` is the
+   script as captions should read (digits as digits, `%` as a symbol, names spelled right), which can
+   differ from a `script.txt` that spells numbers out for the voice. It keeps Whisper's timings and lists
+   what it could not place; read that list.
 4. **Scenes**: write `$J/scenes.json` from the transcript timings — one scene per idea, 3–6 s each, with a point,
    highlight or sound effect every 2–4 s inside longer scenes:
    ```json
